@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eaeff2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="地球online">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.png">
 <title>地球online</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Chakra+Petch:wght@500;700&family=Fredoka:wght@500;700&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700&display=swap">
 <style>
@@ -612,6 +625,12 @@ details.grp .form{margin-top:10px}
 .dchips .btn{padding:0 9px;min-height:0;height:24px;font-size:12px;line-height:1;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
 #dcLine,#dcPie{padding:0 7px;min-height:0;height:18px;font-size:10px;line-height:1;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
 .dchips .dl{font-size:12px;color:var(--muted)}
+/* 日期框:各浏览器(尤其 Safari)默认尺寸不同,统一成和别的输入框一样 */
+input[type=date]{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;height:42px;min-height:42px;line-height:1.2;text-align:left}
+input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:1.2em;margin:0}
+input[type=date]::-webkit-datetime-edit{padding:0}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.app{padding-inline:max(16px,env(safe-area-inset-left),env(safe-area-inset-right));padding-bottom:calc(44px + env(safe-area-inset-bottom))}
 </style>
 
 <div class="app">
@@ -3313,3 +3332,5 @@ details.grp .form{margin-top:10px}
 })();
 </script>
 
+
+</html>
