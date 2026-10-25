@@ -626,6 +626,8 @@ details.grp .form{margin-top:10px}
 #dcLine,#dcPie{padding:0 7px;min-height:0;height:18px;font-size:10px;line-height:1;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
 .dchips .dl{font-size:12px;color:var(--muted)}
 .tabs .tab{flex:1 1 0;min-width:0;padding-top:15px;padding-bottom:15px;-webkit-tap-highlight-color:transparent}
+/* 统计:无数据的虚线框和下面的结余分隔线隔开 */
+#dsum{margin-top:12px}
 /* 日期框:各浏览器(尤其 Safari)默认尺寸不同,统一成和别的输入框一样 */
 input[type=date]{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;height:42px;min-height:42px;line-height:1.2;text-align:left}
 input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:1.2em;margin:0}
@@ -1175,6 +1177,16 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       ymax=Math.max(1,Math.ceil(max/st))*st;ymin=-Math.ceil(-min/st)*st;yticks=Math.round((ymax-ymin)/st);
     }
     if(o.auto){var lo=min,hi=max;if(hi===lo){hi+=1;lo-=1}var pd=(hi-lo)*0.25;ymin=lo-pd;ymax=hi+pd}
+    /* 左右留白按文字实际长度算,图尽量拉宽 */
+    (function(){
+      var lw=0,q,tx,w2;
+      for(q=0;q<=yticks;q++){tx=String(o.yFmt(ymin+(ymax-ymin)*q/yticks));w2=0;for(var c=0;c<tx.length;c++)w2+=tx.charCodeAt(c)>255?12:6.6;if(w2>lw)lw=w2}
+      m.l=Math.max(22,Math.ceil(lw)+12);
+      var rw=0;
+      o.series.forEach(function(sr){tx=single?String(o.s1fmt(sr.values[n-1])):String(sr.name||'');w2=0;for(var c=0;c<tx.length;c++)w2+=tx.charCodeAt(c)>255?12:6.6;if(w2>rw)rw=w2});
+      m.r=Math.max(20,Math.ceil(rw)+14);
+      pw=W-m.l-m.r;
+    })();
     function X(k){return m.l+(n<2?pw/2:pw*k/(n-1))}
     function Y(v){return m.t+ph-ph*(v-ymin)/(ymax-ymin)}
     var svg=sv('svg',{viewBox:'0 0 '+W+' '+H,role:'img','aria-label':o.title,tabindex:'0'});
