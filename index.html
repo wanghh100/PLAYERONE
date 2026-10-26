@@ -1197,7 +1197,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       for(ci=0;ci<cs.length&&!ok;ci++){st=cs[ci]*pp;if(Math.max(1,Math.ceil(max/st))+Math.ceil(-min/st)<=6)ok=true}
       ymax=Math.max(1,Math.ceil(max/st))*st;ymin=-Math.ceil(-min/st)*st;yticks=Math.round((ymax-ymin)/st);
     }
-    if(o.auto){var lo=min,hi=max;if(hi===lo){hi+=1;lo-=1}var pd=(hi-lo)*0.25;ymin=lo-pd;ymax=hi+pd}
+    if(o.auto){var lo=min,hi=max;(o.refs||[]).forEach(function(r){if(r.v<lo)lo=r.v;if(r.v>hi)hi=r.v});if(hi===lo){hi+=1;lo-=1}var pd=(hi-lo)*0.25;ymin=lo-pd;ymax=hi+pd}
     /* 左右留白按文字实际长度算,图尽量拉宽 */
     (function(){
       var lw=0,q,tx,w2;
@@ -1216,10 +1216,18 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       svg.appendChild(sv('line',{x1:m.l,x2:W-m.r,y1:Y(yv),y2:Y(yv),class:'grid'}));
       var yt=sv('text',{x:m.l-8,y:Y(yv)+4,'text-anchor':'end',class:'ax'});yt.textContent=o.yFmt(yv);svg.appendChild(yt);
     }
+    if(o.refs&&o.refs.length>1){
+      var ra=Math.min.apply(null,o.refs.map(function(r){return r.v})),rb=Math.max.apply(null,o.refs.map(function(r){return r.v}));
+      svg.appendChild(sv('rect',{x:m.l,y:Y(rb),width:pw,height:Math.max(0,Y(ra)-Y(rb)),style:'fill:var(--s3);opacity:.12'}));
+    }
+    (o.refs||[]).forEach(function(r){
+      svg.appendChild(sv('line',{x1:m.l,x2:W-m.r,y1:Y(r.v),y2:Y(r.v),style:'stroke:var(--s3);stroke-width:1.2;stroke-dasharray:5 4;opacity:.9'}));
+      var rt=sv('text',{x:m.l+4,y:Y(r.v)-3,class:'ax',style:'fill:var(--s3)'});rt.textContent=r.label;svg.appendChild(rt);
+    });
     var un=sv('text',{x:m.l-8,y:10,'text-anchor':'end',class:'ax'});un.textContent=o.unit||'';svg.appendChild(un);
-    var gap=n>1?pw/(n-1):pw, step=Math.max(1,Math.ceil(46/gap));
+    var gap=n>1?pw/(n-1):pw, step=Math.max(1,Math.ceil((o.xw||46)/gap)),lastX=null;
     for(i=0;i<n;i++){
-      if((n-1-i)%step===0){var xt=sv('text',{x:X(i),y:H-6,'text-anchor':'middle',class:'ax'});xt.textContent=o.xFmt(o.labels[i]);svg.appendChild(xt)}
+      if((n-1-i)%step===0){var xs=o.xFmt(o.labels[i]);if(xs!==lastX){lastX=xs;var xt=sv('text',{x:X(i),y:H-6,'text-anchor':'middle',class:'ax'});xt.textContent=xs;svg.appendChild(xt)}}
     }
     o.series.forEach(function(s){
       var pts=[],k;
@@ -3160,17 +3168,18 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
         var hh=lastH||firstH;if(hh)B.push({d:r.date,v:r.vals.weight/Math.pow(hh/100,2)});
       }
     });
-    function draw(host,arr,name,unit,decimals,empty){
+    function draw(host,arr,name,unit,decimals,empty,refs){
       host.textContent='';
       var labels=[],vals=[];
       arr.forEach(function(x){if(from&&x.d<from)return;if(labels.length&&labels[labels.length-1]===x.d)vals[vals.length-1]=x.v;else{labels.push(x.d);vals.push(x.v)}});
       if(!labels.length){host.appendChild(h('div',{class:'empty',text:empty}));return}
       function f(v){return v.toFixed(decimals)}
-      lineChart(host,{title:name+'变化',labels:labels,series:[{name:name,values:vals,color:'var(--s1)',fmt:function(v){return f(v)+(unit?' '+unit:'')}}],auto:true,h:180,
-        xFmt:function(l){return l.slice(5)},tipTitle:function(i){return labels[i]},yFmt:function(v){return String(Math.round(v*10)/10)},unit:unit,s1fmt:f,firstCol:'日期',noTable:true});
+      lineChart(host,{title:name+'变化',labels:labels,series:[{name:name,values:vals,color:'var(--s1)',fmt:function(v){return f(v)+(unit?' '+unit:'')}}],auto:true,h:180,refs:refs,xw:rg==='all'?44:46,
+        xFmt:function(l){return rg==='all'?l.slice(2,7):l.slice(5)},tipTitle:function(i){return labels[i]},yFmt:function(v){return String(Math.round(v*10)/10)},unit:unit,s1fmt:f,firstCol:'日期',noTable:true});
     }
-    draw(wh,W,'体重','kg',1,'这个范围内还没有体重记录。');
-    draw(bh,B,'BMI','',1,W.length?'算 BMI 需要先记一次身高。':'这个范围内还没有体重记录。');
+    var hq=lastH||firstH, wref=hq?[{v:18.5*hq*hq/10000,label:'适宜下限 '+(18.5*hq*hq/10000).toFixed(1)+' kg'},{v:24*hq*hq/10000,label:'适宜上限 '+(24*hq*hq/10000).toFixed(1)+' kg'}]:null;
+    draw(wh,W,'体重','kg',1,'这个范围内还没有体重记录。',wref);
+    draw(bh,B,'BMI','',1,W.length?'算 BMI 需要先记一次身高。':'这个范围内还没有体重记录。',[{v:18.5,label:'适宜下限 18.5'},{v:24,label:'适宜上限 24'}]);
   }
   function renderBody(){
     var tl=$('b-latest');tl.textContent='';
@@ -3196,15 +3205,15 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     var host=$('b-chart');host.textContent='';
     if(!keys.length){host.appendChild(h('div',{class:'empty',text:'有数据后,这里会画出变化趋势。'}));}
     else{
-      var k=sel.value, rg=$('b-tr').value, from=rg==='all'?'':iso(addDays(new Date(),-parseInt(rg,10)));
+      var hq2=(bodySeries('height')[0]||{}).v, k=sel.value, rg=$('b-tr').value, from=rg==='all'?'':iso(addDays(new Date(),-parseInt(rg,10)));
       var asc=bodySeries(k).reverse().filter(function(x){return !from||x.date>=from}), labels=[], vals=[];
       asc.forEach(function(x){
         if(labels.length&&labels[labels.length-1]===x.date)vals[vals.length-1]=x.v;
         else{labels.push(x.date);vals.push(x.v)}
       });
       if(!labels.length)host.appendChild(h('div',{class:'empty',text:'这个范围内没有这一项的记录。'}));
-      else lineChart(host,{title:MET[k].name+'变化',labels:labels,series:[{name:MET[k].name,values:vals,color:'var(--s1)',fmt:function(v){return fmtV(k,v)}}],auto:true,
-        xFmt:function(l){return l.slice(5)},tipTitle:function(i){return labels[i]},yFmt:function(v){if(MET[k].labels)return Math.abs(v-Math.round(v))<0.001?(MET[k].labels[Math.round(v)]||''):'';if(k==='usg')return v.toFixed(3);return String(Math.round(v*10)/10)},unit:MET[k].unit,s1fmt:function(v){return fmtV(k,v)},firstCol:'日期'});
+      else lineChart(host,{title:MET[k].name+'变化',labels:labels,series:[{name:MET[k].name,values:vals,color:'var(--s1)',fmt:function(v){return fmtV(k,v)}}],auto:true,refs:(k==='weight'&&hq2)?[{v:18.5*hq2*hq2/10000,label:'适宜下限 '+(18.5*hq2*hq2/10000).toFixed(1)+' kg'},{v:24*hq2*hq2/10000,label:'适宜上限 '+(24*hq2*hq2/10000).toFixed(1)+' kg'}]:null,xw:rg==='all'?44:46,
+        xFmt:function(l){return rg==='all'?l.slice(2,7):l.slice(5)},tipTitle:function(i){return labels[i]},yFmt:function(v){if(MET[k].labels)return Math.abs(v-Math.round(v))<0.001?(MET[k].labels[Math.round(v)]||''):'';if(k==='usg')return v.toFixed(3);return String(Math.round(v*10)/10)},unit:MET[k].unit,s1fmt:function(v){return fmtV(k,v)},firstCol:'日期'});
     }
 
     renderDaily();
@@ -3326,7 +3335,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1792980046';
+  var BUILD='1793014155';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
