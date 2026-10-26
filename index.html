@@ -575,7 +575,7 @@ details.grp .form{margin-top:10px}
 #f-quest input,#f-quest select,#f-quest .btn{height:36px;box-sizing:border-box;width:100%;min-width:0}
 #f-quest .qrow2 .btn{width:auto;padding:0 16px}
 #nm{position:relative;top:2px}
-#f-quest input[type=date]{height:36px;min-height:36px;padding-top:0;padding-bottom:0}
+#f-quest input[type=date]{height:36px;min-height:36px}
 #b-latest .stat{padding:5px 10px}
 #b-latest .stat .k{font-size:11px}
 #b-latest .stat .v{font-size:16px;line-height:1.2}
@@ -646,11 +646,11 @@ details.grp .form{margin-top:10px}
 /* 统计:无数据的虚线框和下面的结余分隔线隔开 */
 #dsum{margin-top:12px}
 /* 日期框:各浏览器(尤其 Safari)默认尺寸不同,统一成和别的输入框一样 */
-input[type=date]{-webkit-appearance:none;appearance:none;display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;height:42px;min-height:42px;line-height:1.2;text-align:center;padding-top:0;padding-bottom:0}
-input[type=date]::-webkit-date-and-time-value{text-align:center;min-height:1.2em;margin:0}
+input[type=date]{-webkit-appearance:none;appearance:none;display:flex;align-items:center;justify-content:center;width:100%;min-width:0;max-width:100%;box-sizing:border-box;height:42px;min-height:42px;line-height:normal;text-align:center;padding:0 8px;margin:0}
+input[type=date]::-webkit-date-and-time-value{text-align:center;min-height:0;height:auto;line-height:normal;margin:0 auto;padding:0;display:block}
 input[type=date]::-webkit-datetime-edit{text-align:center}
 input[type=date]::-webkit-datetime-edit-fields-wrapper{display:inline-flex;align-items:center;justify-content:center}
-input[type=date]::-webkit-datetime-edit{padding:0}
+input[type=date]::-webkit-datetime-edit{padding:0;line-height:normal;display:flex;align-items:center;justify-content:center}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0}
 /* 像 App 一样:长按、拖动不会选中文字和图表,输入框里照常能选 */
@@ -1846,8 +1846,8 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       wrap.appendChild(lb);
     }
     var tk=h('div',{style:'display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:2px'});
-    ['0','6','12','18','24'].forEach(function(t){tk.appendChild(h('span',{class:'num',text:t}))});
-    if(!(nd>1))wrap.appendChild(tk);
+    [0,1,2,3,4].forEach(function(q){tk.appendChild(h('span',{class:'num',text:String(Math.round(cap/60*q/4))}))});
+    wrap.appendChild(tk);
     host.appendChild(wrap);
     var ks=Object.keys(TIME_COL).filter(function(c){return dc[c]});
     host.appendChild(ks.length?h('div',{class:'legendline'},ks.map(function(c){
@@ -3341,7 +3341,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793051171';
+  var BUILD='1793051560';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
