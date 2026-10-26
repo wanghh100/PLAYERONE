@@ -840,7 +840,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <div class="sub">
         <h3>货币</h3>
         <div class="form">
-          <label for="s-cur">货币符号<input id="s-cur" maxlength="6"></label>
+          <label for="s-cur">货币符号<input id="s-cur" maxlength="6"></label><label for="s-upd">版本更新<button class="btn ghost" type="button" id="s-upd">检查更新</button></label>
         </div>
       </div>
 
@@ -3276,6 +3276,21 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   $('b-tr').addEventListener('change',renderBody);
   buildBodyForm();
   $('b-date').value=today;$('b-date').max=today;
+
+  /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
+  var BUILD='1792979081';
+  $('s-upd').addEventListener('click',function(){
+    var btn=this;
+    if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
+    btn.disabled=true;btn.textContent='检查中…';
+    function done(){btn.disabled=false;btn.textContent='检查更新'}
+    fetch(location.pathname+'?c='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+      var m=/var BUILD='(\w+)'/.exec(t);
+      if(!m){throw 0}
+      if(m[1]!==BUILD){toast('有新版本,正在刷新…',3000);setTimeout(function(){location.replace(location.pathname+'?v='+encodeURIComponent(m[1]))},500)}
+      else{toast('已经是最新版本');done()}
+    }).catch(function(){toast('检查失败,请确认网络后再试',3500);done()});
+  });
 
   /* ===== 导出 ===== */
   function yn(v){return v?'是':'否'}
