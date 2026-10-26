@@ -765,7 +765,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       <div class="slots compact" id="slots"></div>
     </div>
     <form class="panel card" id="f-item" autocomplete="off">
-      <h2>放进背包</h2>
+      <div class="row"><span class="row" style="gap:6px;justify-content:flex-start;flex-wrap:nowrap"><h2>放进背包</h2><button type="button" class="qm" id="itHelp" aria-label="耐久度怎么算">?</button></span><button type="button" class="btn ghost small" id="itSort" aria-label="切换排序方式" style="min-width:36px;padding:4px 8px;border:0;background:transparent;box-shadow:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.5-4.5L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.5 4.5L21 15"/><path d="M21 20v-5h-5"/></svg></button></div>
       <div class="form">
         <label for="i-name" class="wide">名称<input id="i-name" required maxlength="40"></label>
         <label for="i-type">类型<select id="i-type"></select></label>
@@ -779,9 +779,6 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
         <label for="i-life">自定义寿命(年,可留空)<input id="i-life" type="number" inputmode="decimal" min="0.1" step="any"></label>
         <button class="btn" type="submit">添加</button>
       </div>
-      <details class="tbl"><summary>耐久度怎么算</summary>
-        <p class="muted small">耐久度按磨损曲线算(韦伯分布,形状系数 2),不是匀速下降:新的时候掉得慢,越往后掉得越快。耐久度 = exp(−(等效使用年限 ÷ 特征寿命)²),特征寿命让耐久在预计寿命时约剩 10%:用到预计寿命的 1/4 约剩 87%,一半约剩 56%,3/4 约剩 27%。使用中的物品最低显示 1%,损坏的算 0。预计寿命 = 该类型的一般寿命 × 品阶系数(入门 0.85、主流 1、高端 1.2)× 使用强度系数(轻度 1.3、正常 1、重度 0.7)。品牌很难量化,所以请按品牌的定位选品阶;选“自动”则按价格和该类型的参考价(按人民币计)推断:低于参考价一半算入门,高于 1.5 倍算高端,其余算主流,没填价格按主流。闲置的物品按一半速度老化。一般寿命和各个系数都是经验估值,不是精确数据;填了“自定义寿命”就完全按你填的算。</p>
-      </details>
     </form>
   </section>
 
@@ -1102,6 +1099,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     var r={lang:o.lang==='en'?'en':'zh',name:o.name||'',bio:(o.bio!=null?String(o.bio):(o.title||'')).split(/\r?\n/).slice(0,4).join('\n'),avatar:(typeof o.avatar==='string'?o.avatar:''),lastBackup:(typeof o.lastBackup==='string'?o.lastBackup:''),theme:(o.theme&&typeof o.theme==='object')?o.theme:{style:'game',mode:'auto',accent:'orange',round:'0'},cur:o.cur==null?'¥':o.cur,motto:Array.isArray(o.motto)&&o.motto.length===3?o.motto.map(function(m){return String(m).slice(0,9)}):['英语学了吗？','锻炼了吗？','复盘了吗？']};
     ['time','items','tx','quests','body','reminders'].forEach(function(k){r[k]=Array.isArray(o[k])?o[k]:[]});
     r.items.forEach(function(i){if(i&&i.status==='待更换')i.status='损坏'});
+    r.itemSort=o.itemSort==='rand'?'rand':'date';r.itemOrd=(o.itemOrd&&typeof o.itemOrd==='object'&&!Array.isArray(o.itemOrd))?o.itemOrd:{};
     var LG={'娱乐':'吃玩','运动':'锻炼','通勤':'事务','学习':'输入','?':'未分类','？':'未分类','其他':'未分类','其它':'未分类'};
     r.time.forEach(function(t){if(t&&LG[t.cat])t.cat=LG[t.cat]});
     var meta=(o.skillMeta&&typeof o.skillMeta==='object')?o.skillMeta:{};
@@ -1950,6 +1948,32 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
 
   var STATUS_CLASS={'使用中':'good','闲置':'mute','损坏':'bad'}, STATUS_LIST=['使用中','闲置','损坏'];
   var openItem={};
+  function sortedItems(){
+    var rand=S.itemSort==='rand';
+    if(rand){S.items.forEach(function(x){if(typeof S.itemOrd[x.id]!=='number')S.itemOrd[x.id]=Math.random()})}
+    return S.items.map(function(x,k){return {x:x,k:k}}).sort(function(a,b){
+      if(rand)return S.itemOrd[a.x.id]-S.itemOrd[b.x.id];
+      var da=a.x.date||'',db=b.x.date||'';
+      if(da===db)return a.k-b.k;if(!da)return 1;if(!db)return -1;return da<db?1:-1;
+    }).map(function(o){return o.x});
+  }
+  function itSortUi(){
+    var b=$('itSort');if(!b)return;
+    var t=S.itemSort==='rand'?'当前:随机排列(点击改为按购买日期)':'当前:按购买日期,最新在前(点击改为随机排列)';
+    b.title=t;b.setAttribute('aria-label','切换排序方式。'+t);
+  }
+  $('itSort').addEventListener('click',function(){
+    if(S.itemSort==='rand'){S.itemSort='date'}
+    else{S.itemSort='rand';S.itemOrd={};}
+    save();itSortUi();renderItems();toast(S.itemSort==='rand'?'已改为随机排列':'已改为按购买日期排列');
+  });
+  function usedText(d){
+    var a=parseD(d),b=parseD(today),m=(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.getMonth();
+    if(b.getDate()<a.getDate())m--;
+    if(m<=0)return '不到 1 个月';
+    var y=Math.floor(m/12),r=m%12;
+    return (y?y+' 年':'')+(r?(y?' ':'')+r+' 个月':'');
+  }
   function durFill(el,inf){
     if(inf.dur==null)return;
     el.classList.add('df');
@@ -1957,12 +1981,12 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     el.style.setProperty('--dc',inf.dur>=60?'color-mix(in srgb,var(--s3) 72%,transparent)':(inf.dur>=30?'color-mix(in srgb,var(--s4) 62%,transparent)':'color-mix(in srgb,var(--s8) 55%,transparent)'));
   }
   function renderItems(){
-    var box=$('slots');box.textContent='';
+    var box=$('slots');box.textContent='';itSortUi();
     var total=0;
     S.items.forEach(function(it){total+=it.price||0});
     $('itemSum').textContent=S.items.length+' 件';var tb=$('tab-items');if(tb)tb.textContent=(S.lang==='en'?'Bag':'背包')+'('+S.items.length+')';
     if(!S.items.length){box.appendChild(h('div',{class:'empty',text:'背包是空的。在上面添加你的第一件物品。'}));return}
-    S.items.forEach(function(it){
+    sortedItems().forEach(function(it){
       var inf=itemInfo(it), ti=typeInfo(it), open=!!openItem[it.id];
       if(!open){
         var th=h('span',{class:'th'+(it.img?' has':'')});
@@ -2001,7 +2025,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       }
       var kids=[head,dur];
       if(open){
-        var more=[h('div',{class:'meta',text:money(it.price||0)+(it.date?' · 购买于 '+it.date:'')+' · '+(it.intensity||'正常')+'强度'})];
+        var more=[h('div',{class:'meta',text:money(it.price||0)+(it.date?' · 购买于 '+it.date+' · 已使用 '+usedText(it.date):'')+' · '+(it.intensity||'正常')+'强度'})];
         if(inf.dur!=null)more.push(h('div',{class:'meta',text:'预计寿命 '+yfmt(inf.life)+(it.life>0?'(自定义)':'(品阶:'+inf.tier+')')+(inf.left>0?',约还能用 '+yfmt(inf.left):',已到预计寿命')}));
         var acts=[];
         if(it.img)acts.push(h('button',{class:'btn ghost small',type:'button',text:'去掉头像',onclick:function(){delete it.img;save();renderItems()}}));
@@ -2375,6 +2399,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     md.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
     md.querySelector('#hlpOk').addEventListener('click',close);
     window.__help=function(t,txt){$('hlpT').textContent=t;var bd=$('hlpB');bd.textContent='';var p=document.createElement('p');p.className='muted small';p.textContent=txt;bd.appendChild(p);md.hidden=false;$('hlpOk').focus()};
+    $('itHelp').addEventListener('click',function(){window.__help('耐久度怎么算','耐久度按磨损曲线算(韦伯分布,形状系数 2),不是匀速下降:新的时候掉得慢,越往后掉得越快。耐久度 = exp(−(等效使用年限 ÷ 特征寿命)²),特征寿命让耐久在预计寿命时约剩 10%:用到预计寿命的 1/4 约剩 87%,一半约剩 56%,3/4 约剩 27%。使用中的物品最低显示 1%,损坏的算 0。预计寿命 = 该类型的一般寿命 × 品阶系数(入门 0.85、主流 1、高端 1.2)× 使用强度系数(轻度 1.3、正常 1、重度 0.7)。品牌很难量化,所以请按品牌的定位选品阶;选“自动”则按价格和该类型的参考价(按人民币计)推断:低于参考价一半算入门,高于 1.5 倍算高端,其余算主流,没填价格按主流。闲置的物品按一半速度老化。一般寿命和各个系数都是经验估值,不是精确数据;填了“自定义寿命”就完全按你填的算。')});
     $('skHelp').addEventListener('click',function(){window.__help('技能','这里只显示。添加技能:在“日报”里记时间时填上“技能”栏。移除技能:删掉它名下的日报记录。')});
     Array.prototype.forEach.call(st.querySelectorAll('h3'),function(h3){
       var par=h3.parentElement,ps=Array.prototype.filter.call(par.children,function(c){return c.tagName==='P'&&c.classList.contains('muted')&&c.classList.contains('small')&&!c.id});
@@ -3355,7 +3380,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793052865';
+  var BUILD='1793054914';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
