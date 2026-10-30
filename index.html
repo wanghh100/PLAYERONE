@@ -979,7 +979,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   </div>
 </div>
 <div class="modal" id="txModal" hidden role="dialog" aria-modal="true" aria-labelledby="txTitle">
-  <div class="mbox" style="max-width:440px;max-height:88vh;overflow:auto">
+  <div class="mbox" style="max-width:440px;max-height:68vh;overflow:auto">
     <h3 id="txTitle">修改账目</h3>
     <div class="form" style="grid-template-columns:1fr 1fr">
       <label>收支<select id="tx-type"><option value="out">支出</option><option value="in">收入</option><option value="biz-in">公务报销</option><option value="biz-out">公务支出</option><option value="inv-out">投资支出</option><option value="inv-in">投资收入</option><option value="skip-out">支出（不计·旧）</option><option value="skip-in">收入（不计·旧）</option><option value="jr-in">借入</option><option value="jc-out">借出</option><option value="hk-in">回款</option><option value="hh-out">还款</option><option value="mskip-out">支出（不计）</option><option value="mskip-in">收入（不计）</option><option value="soc-out">社保支出</option><option value="soc-in">社保收入</option><option value="med-out">医保支出</option><option value="med-in">医保收入</option></select></label>
@@ -995,7 +995,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   </div>
 </div>
 <div class="modal" id="bmModal" hidden role="dialog" aria-modal="true" aria-labelledby="bmTitle">
-  <div class="mbox" style="max-width:440px;max-height:88vh;overflow:auto">
+  <div class="mbox" style="max-width:440px;max-height:68vh;overflow:auto">
     <h3 id="bmTitle">吾日三省</h3>
     <p class="muted small" style="margin-bottom:10px">改完自动保存。</p>
     <div class="form" style="grid-template-columns:1fr">
@@ -1008,7 +1008,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   </div>
 </div>
 <div class="modal" id="pfModal" hidden role="dialog" aria-modal="true" aria-labelledby="pfTitle">
-  <div class="mbox" style="max-width:440px;max-height:88vh;overflow:auto">
+  <div class="mbox" style="max-width:440px;max-height:68vh;overflow:auto">
     <h3 id="pfTitle">基本信息</h3>
     <p class="muted small" style="margin-bottom:10px">改完自动保存。这些信息只存在你自己的浏览器里,会包含在存档中。</p>
     <div class="form" style="grid-template-columns:1fr 1fr">
@@ -1024,8 +1024,8 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     <div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" type="button" id="pfClose">完成</button></div>
   </div>
 </div>
-<div class="modal" id="lsModal" hidden role="dialog" aria-modal="true" aria-label="人生状态">
-  <div class="mbox" style="max-width:440px;max-height:88vh;overflow:auto">
+<div class="modal" id="lsModal" style="align-items:start;padding-top:9vh" hidden role="dialog" aria-modal="true" aria-label="人生状态">
+  <div class="mbox" style="max-width:440px;max-height:68vh;overflow:auto">
     <div id="lsBody"></div>
     <div class="row" style="justify-content:flex-end"><button class="btn" type="button" id="lsClose">知道了</button></div>
   </div>
@@ -3959,7 +3959,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793333945';
+  var BUILD='1793334095';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
