@@ -19,7 +19,7 @@
 :root{
   --bg:#eaeff2; --panel:#ffffff; --panel2:#e1e8ec; --ink:#14232e; --muted:#566874; --line:#c9d3d9;
   --accent:#c2410c; --accent-ink:#ffffff; --good:#1f7a4d; --warn:#9a6700; --bad:#b42318;
-  --t-soc:#3A78A8; --t-slp:#7A5BA8; --t-play:#34D34A; --t-in:#A55CD8; --t-out:#EC4474; --t-aff:#F7CB45;
+  --t-soc:#3A78A8; --t-slp:#7A5BA8; --t-play:#34D34A; --t-in:#A55CD8; --t-out:#EC4474; --t-aff:#5CCDF0;
   --s1:#5AA9E6; --s2:#F6A35E; --s3:#7BCB6F; --s4:#F5CF5B; --s5:#F59DB8; --s6:#4CC9B0; --s7:#9B8AD6; --s8:#F37C7C; --s-other:#B5BAC1;
   --c9:#14a3b8; --c10:#c0409b; --c11:#b5651d; --c12:#6aa12b; --c13:#5b6b8c; --c14:#d9a566; --c15:#2a9d8f; --c16:#1e3a5f; --c17:#8e1b3a; --c18:#495057; --c19:#8c8c1e; --c20:#b03fd0; --c21:#e0833a;
   --font-d:"Chakra Petch","Noto Sans SC",system-ui,sans-serif;
@@ -29,14 +29,14 @@
   :root:not([data-theme="light"]){
     --bg:#0d1a22; --panel:#14262f; --panel2:#1c3441; --ink:#e6eef2; --muted:#94a9b5; --line:#28434f;
     --accent:#ff8a3d; --accent-ink:#1a0f06; --good:#4fd08a; --warn:#e6b450; --bad:#ff7a6b; color-scheme:dark;
-    --t-soc:#5A92BD; --t-slp:#9B82C9; --t-play:#34D34A; --t-in:#B677E6; --t-out:#F2587F; --t-aff:#F2CC4F;
+    --t-soc:#5A92BD; --t-slp:#9B82C9; --t-play:#34D34A; --t-in:#B677E6; --t-out:#F2587F; --t-aff:#64D2F2;
     --s1:#6FB6F0; --s2:#F2B077; --s3:#8FD68A; --s4:#F2D676; --s5:#F2A9C2; --s6:#62D6C0; --s7:#A99BE0; --s8:#F29A9A; --s-other:#9AA0A8;
   }
 }
 :root[data-theme="dark"]{
   --bg:#0d1a22; --panel:#14262f; --panel2:#1c3441; --ink:#e6eef2; --muted:#94a9b5; --line:#28434f;
   --accent:#ff8a3d; --accent-ink:#1a0f06; --good:#4fd08a; --warn:#e6b450; --bad:#ff7a6b; color-scheme:dark;
-    --t-soc:#5A92BD; --t-slp:#9B82C9; --t-play:#34D34A; --t-in:#B677E6; --t-out:#F2587F; --t-aff:#F2CC4F;
+    --t-soc:#5A92BD; --t-slp:#9B82C9; --t-play:#34D34A; --t-in:#B677E6; --t-out:#F2587F; --t-aff:#64D2F2;
     --s1:#6FB6F0; --s2:#F2B077; --s3:#8FD68A; --s4:#F2D676; --s5:#F2A9C2; --s6:#62D6C0; --s7:#A99BE0; --s8:#F29A9A; --s-other:#9AA0A8;
 }
 body{background:var(--bg);color:var(--ink);font-family:var(--font-b);font-size:15px;line-height:1.55}
@@ -4014,7 +4014,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793402416';
+  var BUILD='1793403505';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
