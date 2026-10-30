@@ -76,6 +76,9 @@ h1,h2,h3,p{margin:0}
 .card h2{font-family:var(--font-d);font-size:15px;letter-spacing:.1em;font-weight:700}
 .two{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:820px){.two{grid-template-columns:1fr 1fr}}
+#sec-time .two{row-gap:7px}
+#sec-items{gap:9px;margin-top:2px}
+:root[data-style="minimal"] #sec-items{margin-top:-7px}
 .form{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));align-items:end}
 .form .wide{grid-column:1/-1}
 label{display:grid;gap:4px;font-size:12px;color:var(--muted);min-width:0}
@@ -263,7 +266,7 @@ details.grp .form{margin-top:10px}
 :root[data-style="minimal"] .num,:root[data-style="minimal"] .stat .v,:root[data-style="minimal"] .amt,:root[data-style="minimal"] .slot .pr,:root[data-style="minimal"] .slot .kv strong,:root[data-style="minimal"] .tw table{font-variant-numeric:tabular-nums}
 :root[data-style="minimal"] .panel{border:0;border-radius:24px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
 :root[data-style="minimal"] .panel::before{display:none}
-:root[data-style="minimal"] .hero{background:transparent;box-shadow:none;padding:4px 0 0;gap:24px}
+:root[data-style="minimal"] .hero{background:transparent;box-shadow:none;padding:4px 0 0;gap:21px}
 :root[data-style="minimal"] .who{gap:20px}
 :root[data-style="minimal"] .who h1{font-size:50px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 :root[data-style="minimal"] .who{align-items:flex-start;gap:22px}
@@ -528,7 +531,7 @@ details.grp .form{margin-top:10px}
 #f-time .form button[type=submit]{grid-column:1/-1;height:42px}
 .app{gap:11px;padding-block:14px 44px}
 .sec{gap:11px}
-.hero{padding:14px 14px 12px;gap:12px}
+.hero{padding:14px 14px 12px;gap:9px}
 .stats{gap:8px}
 .card{padding:12px 14px;gap:10px}
 .form{gap:8px}
@@ -689,7 +692,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     <form class="panel card" id="f-time" autocomplete="off" novalidate>
       <h2 id="m-h">记日报</h2>
       <div class="form">
-        <label for="m-name">流向<input id="m-name" maxlength="40" placeholder="例如:看资料、打游戏"></label>
+        <label for="m-name">流向<input id="m-name" maxlength="40" placeholder="例如:看资料、打游戏(可不填)"></label>
         <label for="m-hours">时长(小时)<input id="m-hours" type="number" inputmode="decimal" min="0.01" max="24" step="any" required></label>
         <label for="m-cat">类别<select id="m-cat"><option>工作</option><option>健身</option><option>吃玩</option><option>输入</option><option>输出</option><option>事务</option><option>社交</option><option>睡眠</option></select></label>
         <label for="m-skill">技能(可选)<input id="m-skill" list="skillList" maxlength="30" placeholder="例如:英语" autocomplete="off"><datalist id="skillList"></datalist></label>
@@ -720,7 +723,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       <details class="tbl" id="tTblDet"><summary>数据表</summary>
         <div id="ttable"></div>
       </details>
-      <details class="tbl" id="locDet" style="margin-top:0"><summary>位置</summary>
+      <details class="tbl" id="locDet" style="margin-top:0"><summary>位置&amp;心情</summary>
         <div id="loclist"></div>
       </details>
     </div>
@@ -973,8 +976,8 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
 <div class="modal" id="tHelpModal" hidden role="dialog" aria-modal="true" aria-labelledby="tHelpTitle">
   <div class="mbox" style="max-width:380px">
     <h3 id="tHelpTitle">统计说明</h3>
-    <p class="muted small">数据截止到昨天,仅显示时长最长的 4 项,其余合并。</p>
-    <p class="muted small">每日精神留白加磨损事件在 2-4 小时内比较合理。</p>
+    <p class="muted small">数据截止到昨天。</p>
+    <p class="muted small">每日挂机 2-4 小时合理。</p>
     <div class="row" style="justify-content:flex-end"><button class="btn" type="button" id="tHelpOk">知道了</button></div>
   </div>
 </div>
@@ -1171,6 +1174,8 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     r.skillMeta=meta;
     r.rest=normRest(o.rest);
     if(Array.isArray(r.time))r.time.forEach(function(t){if(t&&t.cat==='锻炼')t.cat='健身'});
+    /* 没有“未分类”了:类别不在这 8 个里的旧记录,按没记录处理(算挂机) */
+    r.time=r.time.filter(function(t){return t&&['工作','健身','吃玩','输入','输出','事务','社交','睡眠'].indexOf(t.cat)>=0});
     r.quests.forEach(function(q){if(q){var QM={'账单':'事务','生活':'事务','学习':'输入','锻炼':'健身'};if(QM[q.type])q.type=QM[q.type]}});
     r.tx=r.tx.filter(function(t){return !(t&&(t.cat==='住房'||t.cat==='订阅'||t.cat==='学习'))});
     if(Array.isArray(r.tx)){var MIG={'数码':'数码电器','服务订阅':'生活服务','学习':'学习培训','工作':'工资'};r.tx.forEach(function(t){if(t&&t.kind!=='biz'&&t.kind!=='inv'&&t.kind!=='skip'&&t.kind!=='soc'&&t.kind!=='med'&&MIG[t.cat])t.cat=MIG[t.cat]})}
@@ -1332,6 +1337,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     var min=Infinity;
     o.series.forEach(function(s){s.values.forEach(function(v){if(v>max)max=v;if(v<min)min=v})});
     var ymax=nice(max||4), ymin=0, yticks=4;
+    if(o.yMax){ymax=o.yMax;yticks=o.yTicks||4}
     if(!o.auto&&min<0){
       var q0=Math.max(max,-min)/3,pp=Math.pow(10,Math.floor(Math.log(q0)/Math.LN10)),cs=[1,1.5,2,2.5,3,4,5,6,8,10],ci=0,st=pp,ok=false;
       for(ci=0;ci<cs.length&&!ok;ci++){st=cs[ci]*pp;if(Math.max(1,Math.ceil(max/st))+Math.ceil(-min/st)<=6)ok=true}
@@ -1378,11 +1384,14 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       }
       svg.appendChild(sv('path',{d:d,fill:'none',style:'stroke:'+s.color+';stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round'}));
     });
-    var placed=[];
-    o.series.map(function(s){return {s:s,y:Y(s.values[n-1])}}).sort(function(a,b){return a.y-b.y}).forEach(function(e){
+    var placed=[], ents=o.series.map(function(s){return {s:s,y:Y(s.values[n-1]),show:false}}).sort(function(a,b){return a.y-b.y}), pr=o.prio||[];
+    /* 文字挤在一起时,先保证重要的几项有名字,其余的见缝插针 */
+    ents.filter(function(e){return pr.indexOf(e.s.name)>=0}).sort(function(a,b){return pr.indexOf(a.s.name)-pr.indexOf(b.s.name)}).concat(ents.filter(function(e){return pr.indexOf(e.s.name)<0})).forEach(function(e){
+      if(placed.every(function(py){return Math.abs(py-e.y)>=13})){placed.push(e.y);e.show=true}
+    });
+    ents.forEach(function(e){
       svg.appendChild(sv('circle',{cx:X(n-1),cy:e.y,r:4,style:'fill:'+e.s.color+';stroke:var(--panel);stroke-width:2'}));
-      if(placed.every(function(py){return Math.abs(py-e.y)>=13})){
-        placed.push(e.y);
+      if(e.show){
         var lt=sv('text',{x:X(n-1)+9,y:e.y+4,class:'ax',style:'fill:var(--ink)'});
         lt.textContent=single?o.s1fmt(e.s.values[n-1]):e.s.name;
         svg.appendChild(lt);
@@ -2284,7 +2293,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     var mn=monthNet(today.slice(0,7),'main',true), tm=dayMin(today);
     var sn=skillNames();
     var data=[
-      ['今日已记录',fmt(tm),tm?(tm>=nowMin()?'已记满':'未记录 '+fmt(nowMin()-tm)):'暂无记录','','time'],
+      ['今日已记录',fmt(tm),tm?(tm>=nowMin()?'已记满':'挂机 '+fmt(nowMin()-tm)):'暂无记录','','time'],
       examTile(),
       ['本月花费',money(mn.out),loanLines(),'','gold'],
       ['技能',sn.length+' 项',sn.length?'':'还没有技能','','skills'],
@@ -2345,10 +2354,6 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       trs.push(h('tr',{},cells));
     });
     host.appendChild(rows);
-    host.appendChild(h('div',{class:'legendline'},cats.filter(function(c){return ['工作','吃玩','睡眠','输入','输出'].indexOf(c)<0}).map(function(c){
-      var key=h('i',{class:'kl sq'});key.style.background='var('+TIME_COL[c]+')';
-      return h('span',{},[key,document.createTextNode(c)]);
-    }).concat([h('span',{},[h('i',{class:'kl sq',style:'background:var(--panel2);border:1px solid var(--line)'}),document.createTextNode('未记录')])])));
 
   }
   function hrs(m){return (Math.round(m/6)/10)+'h'}
@@ -2372,14 +2377,6 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     [0,1,2,3,4].forEach(function(q){tk.appendChild(h('span',{class:'num',text:String(Math.round(cap/60*q/4))}))});
     wrap.appendChild(tk);
     host.appendChild(wrap);
-    var ks=Object.keys(TIME_COL).filter(function(c){return dc[c]&&['工作','吃玩','睡眠','输入','输出'].indexOf(c)<0});
-    var lg=ks.map(function(c){
-      var key=h('i',{class:'kl sq'});key.style.background='var('+TIME_COL[c]+')';
-      return h('span',{},[key,document.createTextNode(c+' '+hrs(dc[c]))]);
-    });
-    var ukey=h('i',{class:'kl'});ukey.style.cssText='width:10px;height:10px;border-radius:50%;background:color-mix(in srgb,var(--muted) 50%,var(--panel2))';
-    lg.push(h('span',{},[ukey,document.createTextNode('未记录 '+hrs(Math.max(0,unrec||0)))]));
-    host.appendChild(h('div',{class:'legendline'},lg));
   }
   function renderTStats(wd,byCat){
     var wl='近'+wd.length+'日';
@@ -2389,10 +2386,14 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     if(!days.length)return;
     var g=h('div',{style:'display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:6px 10px;align-items:center;margin-top:-8px;font-size:13px;text-align:center'});
     ['',wl+'平均','单日最长','单日最短'].forEach(function(t,k){g.appendChild(h('span',{class:'muted small',style:k?'':'text-align:left',text:t}))});
-    ['工作','吃玩','睡眠','输入','输出'].forEach(function(c){
-      if((c==='输入'||c==='输出')&&!(byCat[c]&&days.some(function(k){return byCat[c][k]>0})))return;
-      var arr=days.map(function(k){return byCat[c]?byCat[c][k]:0}), sum=arr.reduce(function(a,b){return a+b},0);
-      var key=h('i',{class:'kl sq'});key.style.background='var('+TIME_COL[c]+')';
+    ['工作','吃玩','睡眠','输入','输出','健身','事务','社交','挂机'].forEach(function(c){
+      var idle=(c==='挂机');
+      if(!idle&&c!=='工作'&&c!=='吃玩'&&c!=='睡眠'&&!(byCat[c]&&days.some(function(k){return byCat[c][k]>0})))return;
+      var arr=days.map(function(k){
+        if(idle){var v=0;Object.keys(byCat).forEach(function(q){v+=byCat[q][k]});return Math.max(0,capOf(wd[k])-v)}
+        return byCat[c]?byCat[c][k]:0;
+      }), sum=arr.reduce(function(a,b){return a+b},0);
+      var key=h('i',{class:'kl sq'});key.style.background=idle||!TIME_COL[c]?'var(--s-other)':'var('+TIME_COL[c]+')';
       g.appendChild(h('span',{style:'display:inline-flex;align-items:center;gap:6px;font-weight:700'},[key,document.createTextNode(c)]));
       [Math.round(sum/arr.length),Math.max.apply(null,arr),Math.min.apply(null,arr)].forEach(function(v){g.appendChild(h('span',{class:'num',text:fmt(v)}))});
     });
@@ -2402,6 +2403,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   function updMood(){var v=S.mood&&S.mood[$('m-date').value||today];$('m-mood').value=v==null?'0':String(v)}
   function renderTime(){
     updMood();
+    if(typeof fillLoc==='function')fillLoc();
     var n=tview==='week'?7:(tview==='month'?30:(tview==='year'?365:1)), base=parseD(tday), range=[], i;
     for(i=n-1;i>=0;i--)range.push(iso(addDays(base,-i)));
     $('vDay').setAttribute('aria-pressed',tview==='day'?'true':'false');
@@ -2427,30 +2429,43 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     S.time.forEach(function(t){if(t.date===tday){var c=tcat(t.cat);dcats[c]=(dcats[c]||0)+t.min;dtot+=t.min}});
     $('tflowT').textContent='';$('tflowT').closest('.row').hidden=true;
     sm.textContent='';
-    var capAll=0;range.forEach(function(d){capAll+=capOf(d)});
-    if(n>1)dayStrip($('tstrip'),cats,total,n,capAll-total);else dayStrip($('tstrip'),dcats,dtot,1,capOf(tday)-dtot);
+    /* 第一条日报之前的日子不算挂机(那时还没开始记) */
+    var firstD='';S.time.forEach(function(t){if(t&&t.date&&(!firstD||t.date<firstD))firstD=t.date});
+    var capAll=0,nEff=0;range.forEach(function(d){if(!firstD||d>=firstD){capAll+=capOf(d);nEff++}});
+    if(n>1)dayStrip($('tstrip'),cats,total,nEff||n,Math.max(0,capAll-total));else dayStrip($('tstrip'),dcats,dtot,1,(!firstD||tday>=firstD)?capOf(tday)-dtot:0);
     var wn=Math.max(7,n), wd=[], byCat={}, tot={};
     var sb=tday>=today?addDays(base,-1):base;
     for(i=wn-1;i>=0;i--)wd.push(iso(addDays(sb,-i)));
+    if(firstD){var fi=0;while(fi<wd.length-2&&wd[fi]<firstD)fi++;if(fi>0)wd=wd.slice(fi)}
     S.time.forEach(function(t){
       var k=wd.indexOf(t.date);if(k<0)return;
       var c=tcat(t.cat);
       if(!byCat[c])byCat[c]=wd.map(function(){return 0});
       byCat[c][k]+=t.min;tot[c]=(tot[c]||0)+t.min;
     });
-    var ranked=Object.keys(tot).sort(function(a,b){return tot[b]-tot[a]}), keep=ranked.slice(0,4), rest=ranked.slice(4);
+    var ranked=Object.keys(tot).sort(function(a,b){return tot[b]-tot[a]});
     function hf(v){return fmt(Math.round(v*60))}
-    var series=keep.map(function(c){
-      return {name:c,color:'var('+TIME_COL[c]+')',fmt:hf,values:byCat[c].map(function(v){return Math.round(v/6)/10})};
-    });
-    if(rest.length){
-      series.push({name:'其余',color:'var(--s-other)',fmt:hf,values:wd.map(function(d,k){
-        var v=0;rest.forEach(function(c){v+=byCat[c][k]});return Math.round(v/6)/10;
-      })});
+    /* 近 365 天:折线按周画,每个点是这一周的总时长(开头不满一周的零头不画) */
+    var wkMode=n>=365, Lwd=wd, Lby=byCat, Lcap=wd.map(function(d){return capOf(d)});
+    if(wkMode){
+      Lwd=[];Lby={};Lcap=[];
+      Object.keys(byCat).forEach(function(c){Lby[c]=[]});
+      for(var e=wd.length-1;e>=6;e-=7){
+        var b0=e-6, cs=0, j;
+        Lwd.unshift(wd[b0]);
+        for(j=b0;j<=e;j++)cs+=capOf(wd[j]);
+        Lcap.unshift(cs);
+        Object.keys(byCat).forEach(function(c){var sm2=0;for(j=b0;j<=e;j++)sm2+=byCat[c][j];Lby[c].unshift(sm2)});
+      }
+      /* 记录不满一周时按天画,免得一个点都没有 */
+      if(!Lwd.length){wkMode=false;Lwd=wd;Lby=byCat;Lcap=wd.map(function(d){return capOf(d)})}
     }
+    var series=ranked.map(function(c){
+      return {name:c,color:TIME_COL[c]?'var('+TIME_COL[c]+')':'var(--s-other)',fmt:hf,values:Lby[c].map(function(v){return Math.round(v/6)/10})};
+    });
     var hasData=ranked.length;
-    series.push({name:'未记录',color:'var(--s-other)',fmt:hf,values:wd.map(function(d,k){
-      var v=0;Object.keys(byCat).forEach(function(c){v+=byCat[c][k]});return Math.round(Math.max(0,capOf(d)-v)/6)/10;
+    series.push({name:'挂机',color:'var(--s-other)',fmt:hf,values:Lwd.map(function(d,k){
+      var v=0;Object.keys(Lby).forEach(function(c){v+=Lby[c][k]});return Math.round(Math.max(0,Lcap[k]-v)/6)/10;
     })});
     $('tvLine').setAttribute('aria-pressed',tchart==='line'?'true':'false');
     $('tvBar').setAttribute('aria-pressed',tchart==='bar'?'true':'false');
@@ -2460,7 +2475,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     }else if(tchart==='bar'){
       timeBars(tl2,wd,byCat);
     }else{
-      lineChart(tl2,{title:'每日时长',labels:wd,series:series,xFmt:function(l){return l.slice(5)},tipTitle:function(k){return wd[k]},
+      lineChart(tl2,{prio:['工作','吃玩','睡眠'],title:wkMode?'每周总时长':'每日时长',labels:Lwd,series:series,xFmt:function(l){return l.slice(5)},tipTitle:function(k){return wkMode?Lwd[k]+' 起的一周(合计)':Lwd[k]},
         yFmt:function(v){return String(Math.round(v*10)/10)},unit:'小时',s1fmt:function(v){return String(v)},firstCol:'日期',noTable:true});
     }
     renderTStats(wd,byCat);
@@ -2901,21 +2916,33 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       h('tbody',{},rows.map(function(o){var t=o.t;return h('tr',{style:'cursor:pointer',title:'点一下可修改',onclick:function(){loadTimeEdit(t)}},(n>1?[h('td',{class:'num',style:'white-space:nowrap',text:t.date.slice(5)})]:[]).concat([
         h('td',{style:'white-space:normal'},[document.createTextNode(t.name||'')].concat(t.skill?[h('div',{class:'muted',style:'font-size:11px',text:'技能:'+t.skill})]:[])),
         h('td',{text:t.cat}),
-        h('td',{class:'num',style:'text-align:right;white-space:nowrap',text:fmt(t.min)})]))}))])]));
+        h('td',{class:'num',style:'text-align:right;white-space:nowrap',text:hrs(t.min)})]))}))])]));
   }
   function renderLoc(){
     var host=$('loclist');if(!host)return;host.textContent='';
     var n=tview==='week'?7:(tview==='month'?30:(tview==='year'?365:1)), base=parseD(tday), days=[], q;
     for(q=n-1;q>=0;q--)days.push(iso(addDays(base,-q)));
-    var rows=S.loc.map(function(x,k){return {x:x,k:k}}).filter(function(o){return days.indexOf(o.x.date)>=0});
-    rows.sort(function(a,b){return a.x.date===b.x.date?b.k-a.k:(a.x.date<b.x.date?1:-1)});
-    if(!rows.length){host.appendChild(h('div',{class:'empty',text:(n>1?'这段时间':tday+' 这一天')+'还没有位置记录。'}));return}
-    host.appendChild(h('div',{class:'tw'},[h('table',{},[h('thead',{},[h('tr',{},(n>1?['日期']:[]).concat(['位置','']).map(function(t){return h('th',{text:t})}))]),
-      h('tbody',{},rows.map(function(o){var x=o.x;return h('tr',{},(n>1?[h('td',{class:'num',style:'white-space:nowrap',text:x.date.slice(5)})]:[]).concat([
-        h('td',{style:'white-space:normal',text:x.place}),
-        h('td',{style:'text-align:right'},[h('button',{class:'btn ghost small',type:'button','aria-label':'删除这条位置',text:'删除',onclick:function(){S.loc=S.loc.filter(function(y){return y!==x});save();renderLoc();toast('已删除')}})])]))}))])]));
+    var rows=S.loc.map(function(x,k){return {x:x,k:k,d:x.date}}).filter(function(o){return days.indexOf(o.d)>=0}), has={};
+    rows.forEach(function(o){has[o.d]=1});
+    days.forEach(function(d){if(S.mood&&S.mood[d]!=null&&!has[d])rows.push({x:null,k:-1,d:d})});
+    rows.sort(function(a,b){return a.d===b.d?b.k-a.k:(a.d<b.d?1:-1)});
+    if(!rows.length){host.appendChild(h('div',{class:'empty',text:(n>1?'这段时间':tday+' 这一天')+'还没有位置和心情记录。'}));return}
+    var shown={};
+    function moodTxt(d){
+      if(shown[d]||!S.mood||S.mood[d]==null)return '';
+      shown[d]=1;var v=S.mood[d];return MOODS[String(v)]+' '+(v>0?'+'+v:v);
+    }
+    host.appendChild(h('div',{class:'tw'},[h('table',{},[h('thead',{},[h('tr',{},(n>1?['日期']:[]).concat(['位置','心情','']).map(function(t){return h('th',{text:t})}))]),
+      h('tbody',{},rows.map(function(o){var x=o.x;return h('tr',{},(n>1?[h('td',{class:'num',style:'white-space:nowrap',text:o.d.slice(5)})]:[]).concat([
+        h('td',{style:'white-space:normal',text:x?x.place:'—'}),
+        h('td',{class:'num',style:'white-space:nowrap',text:moodTxt(o.d)}),
+        h('td',{style:'text-align:right'},x?[h('button',{class:'btn ghost small',type:'button',style:'padding:2px 8px;min-height:0;height:24px;font-size:12px;line-height:1','aria-label':'删除这条位置',text:'删除',onclick:function(){S.loc=S.loc.filter(function(y){return y!==x});save();renderLoc();toast('已删除')}})]:[])]))}))])]));
   }
-  function addLoc(v){S.loc=S.loc.filter(function(x){return x.date!==today});S.loc.push({id:uid(),date:today,place:v,ts:Date.now()});$('loc-in').value='';renderLoc()}
+  var locTouched=false;
+  function lastLoc(){var b=null;S.loc.forEach(function(x){if(!b||x.date>b.date||(x.date===b.date&&(x.ts||0)>=(b.ts||0)))b=x});return b?b.place:''}
+  function fillLoc(){var el=$('loc-in');if(el&&!locTouched)el.value=lastLoc()}
+  $('loc-in').addEventListener('input',function(){locTouched=true});
+  function addLoc(v){S.loc=S.loc.filter(function(x){return x.date!==today});S.loc.push({id:uid(),date:today,place:v,ts:Date.now()});locTouched=false;fillLoc();renderLoc()}
   function timeFormMode(on){
     $('m-h').textContent=on?'修改日报':'记日报';
     $('m-save').textContent=on?'保存修改':'记录';
@@ -2943,7 +2970,6 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
     var lv=$('loc-in').value.trim(), nm0=$('m-name').value.trim(), hv0=$('m-hours').value.trim();
     if(lv&&!nm0&&!hv0&&!timeEdit){addLoc(lv);save();toast('已记录今天的位置');return}
-    if(!nm0){toast('请填流向');return}
     var hrs=num($('m-hours').value);
     if(!hrs||hrs<=0){toast('时长要大于 0');return}
     var d=$('m-date').value||today, add=Math.round(hrs*60);
@@ -2954,11 +2980,11 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     var sk=$('m-skill').value.trim();
     if(sk&&skillNames().indexOf(sk)<0)S.skillMeta[sk]={type:'其他',pre:Math.max(0,num($('m-skpre').value)||0)};
     if(timeEdit){
-      timeEdit.name=$('m-name').value.trim();timeEdit.min=add;timeEdit.cat=$('m-cat').value;timeEdit.date=d;timeEdit.skill=sk;
+      timeEdit.name=$('m-name').value.trim()||$('m-cat').value;timeEdit.min=add;timeEdit.cat=$('m-cat').value;timeEdit.date=d;timeEdit.skill=sk;
       if(lv)addLoc(lv);
       endTimeEdit();cleanMeta();save();renderTime();renderSkills();renderHero();toast('已修改');return;
     }
-    S.time.push({id:uid(),name:$('m-name').value.trim(),min:add,cat:$('m-cat').value,date:d,skill:sk});
+    S.time.push({id:uid(),name:$('m-name').value.trim()||$('m-cat').value,min:add,cat:$('m-cat').value,date:d,skill:sk});
     if(lv)addLoc(lv);
     if(!S.mood)S.mood={};if(S.mood[d]==null)S.mood[d]=Number($('m-mood').value)||0;
     tday=d;save();renderTime();renderSkills();renderHero();
@@ -3537,6 +3563,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
         var mins=minutesFrom(g('dur'),unit);
         if(!mins||mins<1){skip('时长无法识别');return}
         var cat=normCat(g('cat'),TIME_CATS);
+        if(cat==='未分类'){skip('类别看不懂(只认工作、健身、吃玩、输入、输出、事务、社交、睡眠)');return}
         if(dedupe&&exist[ds+'|'+nm+'|'+mins+'|'+cat]){skip('已存在');return}
         if(dayMin(ds)+(used[ds]||0)+mins>capOf(ds)){skip(ds+(ds===today?' 超过了到此刻的时长':' 超过 24 小时'));return}
         used[ds]=(used[ds]||0)+mins;
@@ -3987,7 +4014,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793384225';
+  var BUILD='1793402416';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
