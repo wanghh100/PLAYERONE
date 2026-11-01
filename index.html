@@ -12,6 +12,7 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.png">
 <title>头号玩家</title>
+<meta name="author" content="whaha">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Chakra+Petch:wght@500;700&family=Fredoka:wght@500;700&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700&display=swap">
 <style>
 /* 布局:顶部角色卡(等级、经验、四项数据),下方四个标签页:角色、背包、金币、任务。
@@ -77,6 +78,14 @@ h1,h2,h3,p{margin:0}
 .two{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:820px){.two{grid-template-columns:1fr 1fr}}
 #sec-time .two{row-gap:7px}
+.pomo-btn{position:absolute;top:8px;right:10px;min-width:30px;height:30px;border:0;background:none;color:var(--muted);font-size:16px;line-height:1;cursor:pointer;padding:0 4px;border-radius:15px;font-variant-numeric:tabular-nums}
+.pomo-btn small{font-size:11px;margin-left:3px}
+.pomo-btn:focus-visible{outline:2px solid var(--accent)}
+.pomo-time{font-size:44px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:1px;margin:2px 0}
+.pomo-ring{width:150px;height:150px;margin:0 auto;display:block}
+.pomo-ring circle{fill:none;stroke-width:8}
+.pomo-chips{display:flex;gap:4px;flex-wrap:nowrap}
+.pomo-chips .btn{flex:1 1 0;min-width:0;white-space:nowrap;padding:0 4px;min-height:22px;height:22px;font-size:11px;line-height:1;font-weight:500}
 #sec-items{gap:9px;margin-top:2px}
 :root[data-style="minimal"] #sec-items{margin-top:-7px}
 .form{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));align-items:end}
@@ -259,6 +268,7 @@ details.grp .form{margin-top:10px}
 .sbars{display:grid;gap:4px}
 .srow .sl{white-space:nowrap}
 .srow{display:grid;grid-template-columns:34px minmax(0,1fr) 34px;gap:6px;align-items:center;font-size:11px;color:var(--muted)}
+/* wahaha */
 .sbar{display:flex;height:8px;background:var(--panel2);border-radius:2px;overflow:hidden}
 .sbar i{display:block;height:100%}
 .sp{text-align:right;font-variant-numeric:tabular-nums}
@@ -580,6 +590,7 @@ details.grp .form{margin-top:10px}
 #b-latest .stat .v{font-size:16px;line-height:1.2}
 #b-latest .stat .s{font-size:11px;line-height:1.25}
 #qFar{margin-top:6px;font-size:15px}
+/* waheihei */
 #qFar>summary{cursor:pointer;color:var(--muted);font-size:13px;padding:4px 0}
 #qFar .list{margin-top:6px}
 
@@ -694,6 +705,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
 
   <section class="sec" id="sec-time" role="tabpanel" aria-labelledby="tab-time">
     <form class="panel card" id="f-time" autocomplete="off" novalidate>
+      <button type="button" class="pomo-btn" id="pomoBtn" aria-label="番茄钟" title="番茄钟">🍅</button>
       <h2 id="m-h">记日报</h2>
       <div class="form">
         <label for="m-name">流向<input id="m-name" maxlength="40" placeholder="例如:看资料、打游戏(可不填)"></label>
@@ -989,7 +1001,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   <div class="mbox" style="max-width:440px;max-height:68vh;overflow:auto">
     <h3 id="txTitle">修改账目</h3>
     <div class="form" style="grid-template-columns:1fr 1fr">
-      <label>收支<select id="tx-type"><option value="out">支出</option><option value="in">收入</option><option value="biz-in">公务报销</option><option value="biz-out">公务支出</option><option value="inv-out">投资支出</option><option value="inv-in">投资收入</option><option value="skip-out">支出（不计·旧）</option><option value="skip-in">收入（不计·旧）</option><option value="jr-in">借入</option><option value="jc-out">借出</option><option value="hk-in">回款</option><option value="hh-out">还款</option><option value="mskip-out">支出（不计）</option><option value="mskip-in">收入（不计）</option><option value="soc-out">社保支出</option><option value="soc-in">社保收入</option><option value="med-out">医保支出</option><option value="med-in">医保收入</option></select></label>
+      <label>收支<select id="tx-type"><option value="out">支出</option><option value="in">收入</option><option value="biz-in">公务报销</option><option value="biz-out">公务支出</option><option value="inv-out">投资支出</option><option value="inv-in">投资收入</option><option value="jr-in">借入</option><option value="jc-out">借出</option><option value="hk-in">回款</option><option value="hh-out">还款</option><option value="soc-out">社保支出</option><option value="soc-in">社保收入</option><option value="med-out">医保支出</option><option value="med-in">医保收入</option></select></label>
       <label>金额<input id="tx-amt" type="number" inputmode="decimal" min="0" step="any"></label>
       <label style="grid-column:1/-1">名称<input id="tx-name" maxlength="40"></label>
       <label>日期<input id="tx-date" type="date"></label>
@@ -1181,7 +1193,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     /* 没有“未分类”了:类别不在这 8 个里的旧记录,按没记录处理(算挂机) */
     r.time=r.time.filter(function(t){return t&&['工作','健身','吃玩','输入','输出','事务','社交','睡眠'].indexOf(t.cat)>=0});
     r.quests.forEach(function(q){if(q){var QM={'账单':'事务','生活':'事务','学习':'输入','锻炼':'健身'};if(QM[q.type])q.type=QM[q.type]}});
-    r.tx=r.tx.filter(function(t){return !(t&&(t.cat==='住房'||t.cat==='订阅'||t.cat==='学习'))});
+    r.tx=r.tx.filter(function(t){return !(t&&(t.cat==='住房'||t.cat==='订阅'||t.cat==='学习'||t.kind==='mskip'||t.kind==='skip'))});
     if(Array.isArray(r.tx)){var MIG={'数码':'数码电器','服务订阅':'生活服务','学习':'学习培训','工作':'工资'};r.tx.forEach(function(t){if(t&&t.kind!=='biz'&&t.kind!=='inv'&&t.kind!=='skip'&&t.kind!=='soc'&&t.kind!=='med'&&MIG[t.cat])t.cat=MIG[t.cat]})}
     r.avList=(Array.isArray(o.avList)?o.avList:[]).filter(function(x,i,a){return typeof x==='string'&&/^data:image\//.test(x)&&a.indexOf(x)===i});
     if(r.avatar&&r.avList.indexOf(r.avatar)<0)r.avList.unshift(r.avatar);
@@ -1288,7 +1300,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   function paintSel(sel){Array.prototype.forEach.call(sel.options,function(o){var t=o.textContent.replace(/^(?:🟠|🔵|🟢|🟣)\s*/,'');o.textContent=tdotOf(o.value)+' '+t;o.style.color=tcolOf(o.value);o.style.fontWeight='600'});sel.style.color=tcolOf(sel.value);sel.style.borderLeft='4px solid '+tcolOf(sel.value)}
   function bookOf(t){return 'main'}
   var BOOKS=[['main','生活']];
-  var BOOK_OPTS={main:[['out','支出'],['in','收入'],['biz-in','公务报销'],['biz-out','公务支出'],['inv-out','投资支出'],['inv-in','投资收入'],['jr-in','借入'],['jc-out','借出'],['hk-in','回款'],['hh-out','还款'],['mskip-out','支出（不计）'],['mskip-in','收入（不计）'],['soc-out','社保支出'],['soc-in','社保收入'],['med-out','医保支出'],['med-in','医保收入']],biz:[['biz-in','公务报销'],['biz-out','公务支出']],inv:[['inv-out','投资支出'],['inv-in','投资收入'],['jr-in','借入'],['jc-out','借出'],['hk-in','回款'],['hh-out','还款']],soc:[['soc-out','社保支出'],['soc-in','社保收入'],['med-out','医保支出'],['med-in','医保收入']]};
+  var BOOK_OPTS={main:[['out','支出'],['in','收入'],['biz-in','公务报销'],['biz-out','公务支出'],['inv-out','投资支出'],['inv-in','投资收入'],['jr-in','借入'],['jc-out','借出'],['hk-in','回款'],['hh-out','还款'],['soc-out','社保支出'],['soc-in','社保收入'],['med-out','医保支出'],['med-in','医保收入']],biz:[['biz-in','公务报销'],['biz-out','公务支出']],inv:[['inv-out','投资支出'],['inv-in','投资收入'],['jr-in','借入'],['jc-out','借出'],['hk-in','回款'],['hh-out','还款']],soc:[['soc-out','社保支出'],['soc-in','社保收入'],['med-out','医保支出'],['med-in','医保收入']]};
   function monthNet(m,bk,lifeOnly){
     var inc=0,out=0;bk=bk||'main';
     S.tx.forEach(function(t){if(t.date&&t.kind!=='mskip'&&bookOf(t)===bk&&t.date.slice(0,7)===m&&(!lifeOnly||grpOf(t)==='main')){if(t.type==='in')inc+=t.amt;else out+=t.amt}});
@@ -1653,6 +1665,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   }
   /* 按年龄的存款参考(够花几个月):参考 Fidelity 退休储蓄节点(30 岁 1 倍年薪、40 岁 3 倍、50 岁 6 倍、60 岁 8 倍、67 岁 10 倍),
      按支出约占年薪 70% 折算后只取一半(本页只记账面结余,不含投资房产);22 岁及以下只要 1 个月。 */
+  /* whaha */
   function ageTargetMonths(age){
     var K=[[22,1],[30,12],[40,25.7],[50,51.4],[60,68.6],[67,85.7]],i;
     if(age<=22)return 1;
@@ -1798,7 +1811,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   }
 
   var BADGES=[
-    {id:'tm',name:'时间管理大师',ico:'⏰',tip:'连续一年没有逾期任务'},
+    {id:'tm',name:'时间管理大师',ico:'⏰',tip:'某个月完成 20 件任务,且这个月到期的任务没有一件逾期'},
     {id:'dad',name:'钱是你爹',ico:'💰',tip:'连续两个月,每月生活消费低于当月收入的 8%'},
     {id:'saver',name:'守财奴转世',ico:'🐷',tip:'连续两个月,每月生活消费低于当月收入的 3%'},
     {id:'rational',name:'理性消费',ico:'⚖️',tip:'最近 12 个月,生活账本月均支出在 2000–5000 之间'},
@@ -1807,46 +1820,47 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     {id:'lowlife',name:'低配人生',ico:'🥔',tip:'连续 6 个月生活消费低于 1000'},
     {id:'debtor',name:'大负翁',ico:'📉',tip:'连续 6 个月,生活账本月结余为负'},
     {id:'crisis',name:'财务危机',ico:'🚨',tip:'生活账本的总体结余变成负数'},
-    {id:'million',name:'百万俱乐部',ico:'💎',tip:'一年内副业收入、工资收入、投资净收入加起来超过 100 万'},
-    {id:'worth',name:'这班没白上',ico:'🛠️',tip:'公务账本一年的支出超过 5 万'},
+    {id:'million',name:'百万俱乐部',ico:'💎',tip:'一年内生活账本的工资收入超过 100 万'},
+    {id:'worth',name:'这班没白上',ico:'🛠️',tip:'公务账本结余(报销减支出)大于 5000,一次性'},
     {id:'boss',name:'你才是老板',ico:'🏢',tip:'公务账本一年的支出超过 15 万'},
-    {id:'ox1',name:'普通牛马',ico:'🐄',tip:'24–60 岁,一个自然年内日均工作 4.5–6 小时'},
-    {id:'ox2',name:'中级牛马',ico:'🐂',tip:'24–60 岁,一个自然年内日均工作 6–7.5 小时'},
-    {id:'ox3',name:'高级牛马',ico:'🐃',tip:'24–60 岁,一个自然年内日均工作 7.5–9 小时'},
-    {id:'ox4',name:'终极牛马',ico:'🦬',tip:'24–60 岁,一个自然年内日均工作超过 9 小时'},
-    {id:'fish',name:'摸点小鱼',ico:'🐟',tip:'24–60 岁,一个自然年内日均工作 3–4.5 小时'},
-    {id:'live',name:'体验生活',ico:'🍹',tip:'24–60 岁,一个自然年内日均工作 2–3 小时'},
-    {id:'hermit',name:'赛博隐士',ico:'🕶️',tip:'24–60 岁,一个自然年内日均工作 1–2 小时'},
-    {id:'free',name:'财务自由',ico:'🏝️',tip:'24–60 岁,一个自然年内日均工作 0.5–1 小时'},
-    {id:'early',name:'英年早退',ico:'🛌',tip:'24–60 岁,一个自然年内日均工作不到 0.5 小时'},
+    {id:'ox1',name:'舒适打工人',ico:'🐄',tip:'24–60 岁,记满整年的自然年内日均工作 4.5–6 小时,且该年工资收入加副业结余 7–15 万'},
+    {id:'ox3',name:'牛马',ico:'🐃',tip:'24–60 岁,记满整年的自然年内日均工作 7.5–9 小时,且该年工资收入加副业结余 5–14 万'},
+    {id:'ox4',name:'马喽',ico:'🦬',tip:'24–60 岁,记满整年的自然年内日均工作超过 9 小时,且该年工资收入加副业结余 2–14 万'},
+    {id:'fish',name:'摸点小鱼',ico:'🐟',tip:'24–60 岁,记满整年的自然年内日均工作 3–4.5 小时,且该年工资收入加副业结余 12–50 万'},
+    {id:'live',name:'体验生活',ico:'🍹',tip:'24–60 岁,记满整年的自然年内日均工作 2–3 小时,且该年工资收入加副业结余 12–50 万'},
+    {id:'hermit',name:'赛博隐士',ico:'🕶️',tip:'24–60 岁,记满整年的自然年内日均工作 1–2 小时,且该年工资收入加副业结余 12–50 万'},
+    {id:'free',name:'摆渡人生',ico:'🏝️',tip:'24–60 岁,记满整年的自然年内日均工作 0.5–1 小时,且该年工资收入加副业结余 12–50 万'},
+    {id:'early',name:'职场幽灵',ico:'🛌',tip:'24–60 岁,记满整年的自然年内日均工作不到 0.5 小时,且该年工资收入加副业结余 12–50 万'},
     {id:'umb',name:'未雨绸缪',ico:'☔',tip:'连续 2 个月,每个月都存档'},
-    {id:'guard',name:'数据保安',ico:'🛡️',tip:'累计存档 100 次'},
-    {id:'ark',name:'诺亚方舟',ico:'🚢',tip:'累计存档 150 次'},
-    {id:'forever',name:'永生计划',ico:'♾️',tip:'累计存档 600 次'},
+    {id:'guard',name:'数据保安',ico:'🛡️',tip:'累计在 100 个不同的日子存过档(一天存多次只算一天)'},
+    {id:'ark',name:'诺亚方舟',ico:'🚢',tip:'累计在 150 个不同的日子存过档'},
+    {id:'forever',name:'永生计划',ico:'♾️',tip:'累计在 600 个不同的日子存过档'},
     {id:'naked',name:'裸奔',ico:'🏃',tip:'连续 8 个月没有存档'},
     {id:'gamble',name:'孤注一掷',ico:'🎲',tip:'连续 2 年没有存档'},
     {id:'charity',name:'慈善家',ico:'🎁',tip:'投借账本连续 1 年有借出未收回的款'},
     {id:'atm',name:'ATM提款机',ico:'🏧',tip:'投借账本连续 2 年有借出未收回的款'},
-    {id:'bet1',name:'以小博大',ico:'💵',tip:'某个半年(1–6 月或 7–12 月)内,投资支出占生活账本总余额的 25%–35%'},
-    {id:'bet2',name:'富贵险中求',ico:'🏔️',tip:'某个半年内,投资支出占生活账本总余额的 35%–50%'},
-    {id:'bet3',name:'豪赌人生',ico:'🎰',tip:'某个半年内,投资支出占生活账本总余额的 50%–65%'},
-    {id:'bet4',name:'悬崖起跳',ico:'🧗',tip:'某个半年内,投资支出占生活账本总余额的 65%–75%'},
-    {id:'bet5',name:'置之死地',ico:'⚔️',tip:'某个半年内,投资支出占生活账本总余额的 75%–85%'},
-    {id:'bet6',name:'极限生存',ico:'🔥',tip:'某个半年内,投资支出占生活账本总余额的 85%–95%'},
-    {id:'bet7',name:'命悬一线',ico:'🤑',tip:'某个半年内,投资支出占生活账本总余额的 95% 以上'},
+    {id:'bet1',name:'以小博大',ico:'💵',tip:'某笔投资支出占当时(那天之前)生活账本总余额的 25%–35%'},
+    {id:'bet2',name:'富贵险中求',ico:'🏔️',tip:'某笔投资支出占当时(那天之前)生活账本总余额的 35%–50%'},
+    {id:'bet3',name:'豪赌人生',ico:'🎰',tip:'某笔投资支出占当时(那天之前)生活账本总余额的 50%–65%'},
+    {id:'bet4',name:'悬崖起跳',ico:'🧗',tip:'某笔投资支出占当时(那天之前)生活账本总余额的 65%–75%'},
+    {id:'bet5',name:'置之死地',ico:'⚔️',tip:'某笔投资支出占当时(那天之前)生活账本总余额的 75%–85%'},
+    {id:'bet6',name:'极限生存',ico:'🔥',tip:'某笔投资支出占当时(那天之前)生活账本总余额的 85%–95%'},
+    {id:'bet7',name:'命悬一线',ico:'🤑',tip:'某笔投资支出占当时(那天之前)生活账本总余额的 95% 以上'},
     {id:'sc1',name:'困难模式',ico:'😰',tip:'人生状态分数连续 6 个月低于 55'},
     {id:'sc2',name:'地狱模式',ico:'👹',tip:'人生状态分数连续 6 个月低于 35'},
-    {id:'sc3',name:'苟住！',ico:'🐢',tip:'人生状态分数连续 6 个月低于 25'},
+    {id:'sc3',name:'苟活于世',ico:'🐢',tip:'人生状态分数连续 6 个月低于 25'},
     {id:'sc4',name:'人定胜天',ico:'🌅',tip:'人生状态分数连续 6 个月低于 12'},
     {id:'npc',name:'NPC',ico:'🤖',tip:'人生状态分数连续 1 年在 55–65 之间'},
-    {id:'cm1',name:'稳稳的幸福',ico:'🍀',tip:'人生状态连续 1 年是“舒服”(71–90 分)'},
-    {id:'cm3',name:'稳如老狗',ico:'🐕',tip:'人生状态连续 3 年是“舒服”(71–90 分)'},
+    {id:'cm1',name:'稳稳的幸福',ico:'🍀',tip:'人生状态连续 1 年在 71 分以上'},
+    {id:'cm3',name:'稳如老狗',ico:'🐕',tip:'人生状态连续 3 年在 71 分以上'},
     {id:'sh1',name:'人间值得',ico:'🌸',tip:'人生状态连续 1 年是“爽”(91 分以上)'},
     {id:'sh3',name:'活明白了',ico:'🧘',tip:'人生状态连续 3 年是“爽”(91 分以上)'},
-    {id:'vip',name:'VIP玩家',ico:'🥂',tip:'某个自然年内,手里的现金(不含社保账本)超过 1000 万'},
-    {id:'kr',name:'氪金选手',ico:'💳',tip:'某个自然年内,手里的现金(不含社保账本)超过 3000 万'},
-    {id:'god',name:'神仙',ico:'🧙',tip:'某个自然年内,手里的现金(不含社保账本)超过 1 亿'},
-    {id:'hack',name:'开了',ico:'🛸',tip:'某个自然年内,手里的现金(不含社保账本)超过 10 亿'},
+    {id:'vip',name:'VIP玩家',ico:'🥂',tip:'某个自然年内,手里的现金(不含社保账本、借入和还款)超过 1000 万'},
+    {id:'kr',name:'氪金选手',ico:'💳',tip:'某个自然年内,手里的现金(不含社保账本、借入和还款)超过 3000 万'},
+    {id:'god',name:'神仙',ico:'🧙',tip:'某个自然年内,手里的现金(不含社保账本、借入和还款)超过 1 亿'},
+    {id:'rise',name:'神',ico:'⚡',tip:'某连续 3 个月生活账本结余都小于 1000,且那时投资账本结余小于 5 万,之后四年内,手里的现金(不含社保账本、借入和还款)增加到 200 万'},
+    {id:'wake',name:'财富觉醒',ico:'💡',tip:'手里的现金总结余(不含社保账本、借入和还款)达到 500 万'},
+    {id:'hack',name:'开了',ico:'🛸',tip:'某个自然年内,手里的现金(不含社保账本、借入和还款)超过 10 亿'},
     {id:'gym1',name:'薄肌小子',ico:'💪',tip:'连续 8 个月,月均健身时长 21–29.9 小时'},
     {id:'gym2',name:'健身房股东',ico:'🏋️',tip:'连续 8 个月,月均健身天数不少于 21 天,且月均时长 30 小时以上'},
     {id:'young',name:'莫欺少年穷',ico:'🌱',tip:'年龄不到 30 岁,某个半年(1–6 月或 7–12 月)生活账本总收入少于 12000'},
@@ -1863,24 +1877,23 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     if(!A.bk0)A.bk0=today;
     BADGES.forEach(function(b){n[b.id]=0});
     /* 账本按月/年汇总(只算生活、公务;示例数据不计) */
-    var mo={}, ymInc={}, ymBiz={}, daily={};
+    var mo={}, yWage={}, ymBiz={}, daily={}, yAll={}, bizBal=0;
     S.tx.forEach(function(t){
       if(!t||!t.date||t.demo||t.kind==='mskip')return;
       var g=grpOf(t), m=t.date.slice(0,7), y=t.date.slice(0,4);
       if(g==='main'){
         var b=mo[m]||(mo[m]={inc:0,out:0,has:0});
-        if(t.type==='in'){b.inc+=t.amt;if(t.cat==='工资'||t.cat==='副业')ymInc[y]=(ymInc[y]||0)+t.amt}else b.out+=t.amt;
+        if(t.type==='in'){b.inc+=t.amt;if(t.cat==='工资'){yWage[y]=(yWage[y]||0)+t.amt;yAll[y]=(yAll[y]||0)+t.amt}else if(t.cat==='副业')yAll[y]=(yAll[y]||0)+t.amt}else{b.out+=t.amt;if(t.cat==='副业')yAll[y]=(yAll[y]||0)-t.amt}
         b.has++;daily[t.date]=(daily[t.date]||0)+(t.type==='in'?t.amt:-t.amt);
-      }else if(g==='biz'&&t.type==='out')ymBiz[y]=(ymBiz[y]||0)+t.amt;
-      else if(t.kind==='inv')ymInc[y]=(ymInc[y]||0)+(t.type==='in'?t.amt:-t.amt);
+      }else if(g==='biz'){bizBal+=t.type==='in'?t.amt:-t.amt;if(t.type==='out')ymBiz[y]=(ymBiz[y]||0)+t.amt}
     });
-    var keys=Object.keys(mo).sort(), months=[];
+    var keys=Object.keys(mo).sort(), months=[], mkeys=[];
     if(keys.length){
       var cy=+keys[0].slice(0,4), cm=+keys[0].slice(5,7), lastM=today.slice(0,7);
       for(;;){
         var key=cy+'-'+pad(cm);
         if(key>=lastM)break;
-        if(!mPaused(key))months.push(mo[key]||{inc:0,out:0,has:0});
+        if(!mPaused(key)){months.push(mo[key]||{inc:0,out:0,has:0});mkeys.push(key)}
         cm++;if(cm>12){cm=1;cy++}
       }
     }
@@ -1918,9 +1931,10 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       if(bal>0)seenPos=true;
       if(bal<0&&!neg&&seenPos){n.crisis++;neg=true}else if(bal>=0)neg=false;
     });
-    Object.keys(ymInc).forEach(function(y){if(ymInc[y]>1000000)n.million++});
-    Object.keys(ymBiz).forEach(function(y){if(ymBiz[y]>150000)n.boss++;else if(ymBiz[y]>50000)n.worth++});
-    /* 每个已过完的自然年的日均工作时长(按有记录的天数算,至少 180 天有记录) */
+    Object.keys(yWage).forEach(function(y){if(yWage[y]>1000000)n.million++});
+    Object.keys(ymBiz).forEach(function(y){if(ymBiz[y]>150000)n.boss++});
+    if(bizBal>5000)n.worth=1;
+    /* 每个已过完的自然年的日均工作时长(按有记录的天数算,从 1 月 1 日前就开始记,且全年至少 300 天有记录) */
     var byD={};
     S.time.forEach(function(t){
       if(!t||!t.date||t.demo)return;
@@ -1933,10 +1947,12 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     Object.keys(yrs).forEach(function(y){
       if(+y>=+today.slice(0,4))return;
       var o=yrs[y], age=ageAtD(birth,new Date(+y,11,31));
-      if(o.days<180||age==null||age<24||age>60)return;
+      if(o.days<300||dts[0]>y+'-01-01'||age==null||age<24||age>60)return;
       var hh=o.wm/60/o.days;
-      var id=hh>=9?'ox4':hh>=7.5?'ox3':hh>=6?'ox2':hh>=4.5?'ox1':hh>=3?'fish':hh>=2?'live':hh>=1?'hermit':hh>=0.5?'free':'early';
-      n[id]++;
+      var yi=yAll[y]||0;
+      var id=hh>=9?(yi>=20000&&yi<=140000?'ox4':''):hh>=7.5?(yi>=50000&&yi<=140000?'ox3':''):hh>=6?'':hh>=4.5?(yi>=70000&&yi<=150000?'ox1':''):hh>=3?'fish':hh>=2?'live':hh>=1?'hermit':hh>=0.5?'free':'early';
+      if(id==='fish'||id==='live'||id==='hermit'||id==='free'||id==='early'){if(yi<120000||yi>500000)id=''}
+      if(id)n[id]++;
     });
     /* 莫欺少年穷:某个已过完的半年,生活账本总收入少于 12000,年龄不到 30 岁 */
     var hinc={};
@@ -1953,7 +1969,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     });
     /* 存档:累计次数、连续按月存档、长时间不存档 */
     var bl=(A.bk||[]).slice().sort(), bd=bl.filter(function(d,k){return k===0||d!==bl[k-1]});
-    if(bl.length>=100)n.guard=1;if(bl.length>=150)n.ark=1;if(bl.length>=600)n.forever=1;
+    if(bd.length>=100)n.guard=1;if(bd.length>=150)n.ark=1;if(bd.length>=600)n.forever=1;
     var mrun=0,pm=null;
     bd.map(function(d){return d.slice(0,7)}).filter(function(m,k,a){return k===0||m!==a[k-1]}).forEach(function(m){
       if(mPaused(m))return;
@@ -1989,30 +2005,38 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       if(out0>0.005){if(!sp0)sp0=t.date}else if(sp0)endSp(t.date);
     });
     if(sp0)endSp(today);
-    /* 每个已过完的半年:投资支出 ÷ 半年末生活账本总余额 */
-    var hv={}, hcur=today.slice(0,4)+(+today.slice(5,7)<=6?'H1':'H2');
-    S.tx.forEach(function(t){
-      if(!t||!t.date||t.demo||t.kind!=='inv'||t.type!=='out')return;
-      var hk=t.date.slice(0,4)+(+t.date.slice(5,7)<=6?'H1':'H2');
-      if(hk<hcur)hv[hk]=(hv[hk]||0)+t.amt;
-    });
+    /* 每一笔投资支出 ÷ 那天之前的生活账本总余额(不看时间窗口) */
     var dkeys=Object.keys(daily).sort();
-    Object.keys(hv).forEach(function(hk){
-      var endD=hk.slice(0,4)+(hk.slice(4)==='H1'?'-06-30':'-12-31'), bal2=0;
-      dkeys.forEach(function(d){if(d<=endD)bal2+=daily[d]});
+    S.tx.forEach(function(t){
+      if(!t||!t.date||t.demo||t.kind!=='inv'||t.type!=='out'||t.date>today)return;
+      var bal2=0;
+      dkeys.forEach(function(d){if(d<t.date)bal2+=daily[d]});
       if(bal2<=0)return;
-      var r=hv[hk]/bal2*100;
+      var r=t.amt/bal2*100;
       var id=r>=95?'bet7':r>=85?'bet6':r>=75?'bet5':r>=65?'bet4':r>=50?'bet3':r>=35?'bet2':r>=25?'bet1':'';
       if(id)n[id]++;
     });
-    /* 某个自然年内,手里现金(除社保外的所有账本收入减支出)的最高点 */
+    /* 某个自然年内,手里现金(除社保、借入、还款外的所有账本收入减支出)的最高点 */
     var cd={};
     S.tx.forEach(function(t){
-      if(!t||!t.date||t.demo||t.kind==='mskip'||t.kind==='skip'||t.kind==='soc'||t.kind==='med')return;
+      if(!t||!t.date||t.demo||t.kind==='mskip'||t.kind==='skip'||t.kind==='soc'||t.kind==='med'||t.kind==='jr'||t.kind==='hh')return;
       cd[t.date]=(cd[t.date]||0)+(t.type==='in'?t.amt:-t.amt);
     });
     var cb=0, ymx={};
     Object.keys(cd).sort().forEach(function(d){cb+=cd[d];var y=d.slice(0,4);if(ymx[y]==null||cb>ymx[y])ymx[y]=cb});
+    /* 连续 3 个月生活账本结余小于 1000 之后,四年内现金涨到 200 万 */
+    var cks=Object.keys(cd).sort(), cc=0, cpts=cks.map(function(d){cc+=cd[d];return [d,cc]}), lowRun=0;
+    mkeys.forEach(function(mk,mi){
+      var mm=months[mi];
+      if(mm.has&&mm.inc-mm.out<1000)lowRun++;else lowRun=0;
+      if(lowRun>=3&&!n.rise){
+        var ya=+mk.slice(0,4), ma=+mk.slice(5,7), a0=mk+'-31', a1=(ya+4)+'-'+pad(ma)+'-31', ivb=0;
+        S.tx.forEach(function(t){if(t&&t.date&&!t.demo&&t.kind==='inv'&&t.date<=a0)ivb+=t.type==='in'?t.amt:-t.amt});
+        if(ivb>=50000)return;
+        cpts.forEach(function(pt){if(pt[0]>a0&&pt[0]<=a1&&pt[1]>=2000000)n.rise=1});
+      }
+    });
+    cpts.forEach(function(pt){if(pt[1]>=5000000)n.wake=1});
     Object.keys(ymx).forEach(function(y){
       var v=ymx[y];
       var id=v>1e9?'hack':v>1e8?'god':v>3e7?'kr':v>1e7?'vip':'';
@@ -2079,7 +2103,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
         if(L-a3*1095*DAY>=365*DAY)n[id1]++;
       });
     }
-    longRun(function(v){return v>=71&&v<91},'cm1','cm3');
+    longRun(function(v){return v>=71},'cm1','cm3');
     longRun(function(v){return v>=91},'sh1','sh3');
     /* 健身:连续 8 个月的月均时长和月均天数,拿到后重新计时 */
     var gm={}, gk0='';
@@ -2117,17 +2141,17 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
         else if(ah>=21&&ah<30){n.gym1++;ge+=7}
       }
     }
-    /* 连续一年没有逾期任务:有逾期就拿不到,补完或删除逾期任务后重新计时 */
-    var st0=A.tm||today;
-    if(!S.quests.some(function(q){return q&&!q.done&&!q.demo&&q.due&&q.due<today})){
-      for(;;){
-        var cnt=0,cur=st0;
-        while(cnt<365&&cur<today){if(!isRest(cur))cnt++;cur=iso(addDays(parseD(cur),1))}
-        if(cnt<365)break;
-        A.tmN=(A.tmN||0)+1;st0=cur;
+    /* 时间管理大师:某个已过完的月份里完成 20 件任务,且这个月到期的任务没有一件逾期(没完成,或完成得比到期日晚) */
+    var qm={}, qbad={}, qcm=today.slice(0,7);
+    S.quests.forEach(function(q){
+      if(!q||q.demo)return;
+      if(q.done&&q.doneAt){var dm=q.doneAt.slice(0,7);qm[dm]=(qm[dm]||0)+1}
+      if(q.due){
+        var um=q.due.slice(0,7);
+        if((!q.done&&q.due<today)||(q.done&&q.doneAt&&q.doneAt>q.due))qbad[um]=1;
       }
-    }
-    A.tm=st0;n.tm=A.tmN||0;
+    });
+    Object.keys(qm).forEach(function(m){if(m<qcm&&qm[m]>=20&&!qbad[m]&&!mPaused(m))n.tm++});
     /* 勋章按现有数据重新核算,数据不再符合就消失;第一次算出的历史勋章不弹提示 */
     var got=[];
     BADGES.forEach(function(b){
@@ -2190,7 +2214,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     $('pf-name').value=S.name||'';
     ['birth','gender','marital','company','job','city','note'].forEach(function(k){$('pf-'+k).value=P[k]||''});
     $('pf-birth').max=today;
-    $('pf-age').textContent=ageOf(P.birth)?'· '+ageOf(P.birth)+(S.lang==='en'?' yrs':' 岁'):'';
+    $('pf-age').textContent=ageOf(P.birth)?'· '+ageOf(P.birth)+(S.lang==='en'?' yrs':' 岁'):(S.lang==='en'?'· used in Life State':'· 参与人生状态计算');
     $('pfModal').hidden=false;$('pf-name').focus();
   }
   function closeProfile(){$('pfModal').hidden=true;try{$('nm').focus()}catch(e){}}
@@ -2200,7 +2224,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       var v=this.value.trim();
       if(k==='birth'&&v>today){toast('出生日期不能晚于今天');this.value=S.profile.birth||'';return}
       S.profile[k]=v;save();
-      if(k==='birth')$('pf-age').textContent=ageOf(v)?'· '+ageOf(v)+(S.lang==='en'?' yrs':' 岁'):'';if(k==='birth'){renderHero();syncBadge()}
+      if(k==='birth')$('pf-age').textContent=ageOf(v)?'· '+ageOf(v)+(S.lang==='en'?' yrs':' 岁'):(S.lang==='en'?'· used in Life State':'· 参与人生状态计算');if(k==='birth'){renderHero();syncBadge()}
     });
   });
   $('pf-name').addEventListener('change',function(){S.name=this.value.trim();save();renderHero();syncBadge();});
@@ -2240,6 +2264,9 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   var txEdit=null;
   function openTx(t){
     txEdit=t;
+    Array.prototype.slice.call($('tx-type').querySelectorAll('option[data-tmp]')).forEach(function(o){o.parentNode.removeChild(o)});
+    var tv0=(t.kind?t.kind+'-':'')+t.type;
+    if(!Array.prototype.some.call($('tx-type').options,function(o){return o.value===tv0})){var op0=document.createElement('option');op0.value=tv0;op0.textContent=(TXK[t.kind]||TXK[''])[t.type];op0.setAttribute('data-tmp','1');$('tx-type').appendChild(op0)}
     $('tx-type').value=(t.kind?t.kind+'-':'')+t.type;paintSel($('tx-type'));$('tx-amt').value=t.amt;$('tx-name').value=t.name||'';$('tx-date').value=t.date||today;$('tx-date').max=today;
     setCats($('tx-cat'),bookOf(t),t.cat);setChs($('tx-ch'),bookOf(t),t.ch||'');$('tx-pay').value=t.pay||'';$('tx-note').value=t.note||'';
     $('txModal').hidden=false;$('tx-name').focus();
@@ -2406,6 +2433,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     host.appendChild(g);
   }
   var MOODS={'-5':'😭','-3':'😢','-1':'😕','0':'😐','1':'🙂','3':'😄','5':'🤩'};
+  /* wahaha */
   function updMood(){var v=S.mood&&S.mood[$('m-date').value||today];$('m-mood').value=v==null?'0':String(v)}
   function renderTime(){
     updMood();
@@ -2840,13 +2868,12 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       cb.checked=!!q.done;
       cb.addEventListener('change',function(){
         q.done=cb.checked;
-        if(q.done&&q.due&&q.due<today)S.ach.tm=today;
+        if(q.done)q.doneAt=today;else delete q.doneAt;
         save();renderQuests();renderHero();
         if(q.done)toast('任务完成');
       });
       var late=!q.done&&q.due&&q.due<today;
       var del=h('button',{class:'btn danger small',type:'button',text:'删除',onclick:function(){
-        if(!q.done&&q.due&&q.due<today)S.ach.tm=today;
         S.quests=S.quests.filter(function(x){return x.id!==q.id});save();renderQuests();renderHero();
       }});
       tgt.appendChild(h('div',{class:'li'+(q.done?' done':'')},[
@@ -2910,6 +2937,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
 
   /* ===== 日报数据表:选一天,点一行修改 ===== */
   var timeEdit=null;
+  /* wheihei */
   function renderTTable(){
     var tb=$('ttable');tb.textContent='';
     var n=tview==='week'?7:(tview==='month'?30:(tview==='year'?365:1)), base=parseD(tday), days=[], q;
@@ -2997,6 +3025,111 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     tday=d;save();renderTime();renderSkills();renderHero();
     $('m-name').value='';$('m-hours').value='';$('m-skill').value='';$('m-skpre').value='0';updSkNew();toast('已记录');
   });
+
+  /* ===== 番茄钟:专注时间结束后自动记进日报 ===== */
+  (function(){
+    var PK='lifepanel.pomo', P=null, md=document.createElement('div'), tmr=null, pick=25;
+    function ld(){try{var r=localStorage.getItem(PK);P=r?JSON.parse(r):null}catch(e){P=null}if(P&&!(P.target>0))P=null}
+    function sv(){try{if(P)localStorage.setItem(PK,JSON.stringify(P));else localStorage.removeItem(PK)}catch(e){}}
+    function focused(){return P?P.acc+(P.seg?Date.now()-P.seg:0):0}
+    function left(){return P?Math.max(0,P.target-focused()):0}
+    function mmss(ms){var t=Math.ceil(ms/1000),m=Math.floor(t/60),s2=t%60;return pad(m)+':'+pad(s2)}
+    md.className='modal';md.hidden=true;md.setAttribute('role','dialog');md.setAttribute('aria-modal','true');
+    md.innerHTML='<div class="mbox" style="max-width:360px">'
+      +'<h3>番茄钟</h3>'
+      +'<div id="pmSet" style="display:grid;gap:10px">'
+      +'<label for="pm-cat">类别<select id="pm-cat"></select></label>'
+      +'<label for="pm-name">流向<input id="pm-name" maxlength="40" placeholder="例如:写报告(可不填)"></label>'
+      +'<label for="pm-sk">技能(可选)<input id="pm-sk" list="skillList" maxlength="30" autocomplete="off"></label>'
+      +'<div class="pomo-chips" id="pm-chips"></div>'
+      +'<label for="pm-min">专注时长(分钟)<input id="pm-min" type="number" inputmode="numeric" min="1" max="180" step="1" value="25"></label>'
+      +'<div class="row" style="justify-content:flex-end;gap:8px"><button class="btn ghost" type="button" id="pm-close">关闭</button><button class="btn" type="button" id="pm-go">开始专注</button></div>'
+      +'</div>'
+      +'<div id="pmRun" style="display:grid;gap:10px" hidden>'
+      +'<svg class="pomo-ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" stroke="var(--line)"></circle><circle id="pm-arc" cx="50" cy="50" r="42" stroke="var(--accent)" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="263.9" stroke-dashoffset="0"></circle></svg>'
+      +'<div class="pomo-time" id="pm-left" role="timer" aria-live="off">25:00</div>'
+      +'<div class="muted small" id="pm-info" style="text-align:center"></div>'
+      +'<div class="row" style="justify-content:center;gap:6px;flex-wrap:nowrap"><button class="btn ghost small" type="button" id="pm-pause" style="white-space:nowrap">暂停</button><button class="btn small" type="button" id="pm-stop" style="white-space:nowrap">提前结束并记录</button><button class="btn danger small" type="button" id="pm-drop" style="white-space:nowrap">放弃</button></div>'
+      +'</div></div>';
+    document.body.appendChild(md);
+    function q(id){return md.querySelector('#'+id)}
+    function close(){md.hidden=true}
+    bdClose(md,close);
+    md.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+    q('pm-cat').innerHTML=$('m-cat').innerHTML;
+    [15,25,45,60].forEach(function(m){
+      var b=document.createElement('button');b.type='button';b.className='btn ghost small';b.textContent=m+' 分钟';b.setAttribute('data-m',m);
+      b.addEventListener('click',function(){q('pm-min').value=m;chips()});
+      q('pm-chips').appendChild(b);
+    });
+    function chips(){var v=+q('pm-min').value;Array.prototype.forEach.call(q('pm-chips').children,function(b){b.setAttribute('aria-pressed',String(+b.getAttribute('data-m')===v))})}
+    q('pm-min').addEventListener('input',chips);chips();
+    function beep(){
+      try{var A=window.AudioContext||window.webkitAudioContext,c=new A(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.setValueAtTime(.2,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.9);o.start();o.stop(c.currentTime+.9)}catch(e){}
+      try{if(navigator.vibrate)navigator.vibrate([200,100,200])}catch(e){}
+    }
+    function btn(){
+      var b=$('pomoBtn');if(!b)return;
+      b.textContent='🍅';
+      if(P){var sm=document.createElement('small');sm.textContent=mmss(left());b.appendChild(sm)}
+    }
+    function view(){
+      var run=!!P;
+      q('pmSet').hidden=run;q('pmRun').hidden=!run;
+      if(run){
+        q('pm-left').textContent=mmss(left());
+        q('pm-arc').style.strokeDashoffset=String(263.9*(1-left()/P.target));
+        q('pm-pause').textContent=P.seg?'暂停':'继续';
+        q('pm-info').textContent=P.cat+(P.name?' · '+P.name:'')+(P.skill?' · '+P.skill:'')+(P.seg?'':'(已暂停)');
+      }
+    }
+    function record(full){
+      var st=P, ms=full?st.target:focused(), m=Math.round(ms/60000);
+      P=null;sv();clearInterval(tmr);tmr=null;btn();view();close();
+      if(m<1){toast('不足 1 分钟,没有记录');return}
+      var d=today, free=capOf(d)-dayMin(d);
+      if(free<1){toast('今天已经记满,这段专注没能记入日报',4500);return}
+      var add=Math.min(m,free);
+      if(st.skill&&skillNames().indexOf(st.skill)<0)S.skillMeta[st.skill]={type:'其他',pre:0};
+      S.time.push({id:uid(),name:st.name||st.cat,min:add,cat:st.cat,date:d,skill:st.skill||''});
+      tday=d;save();renderTime();renderSkills();renderHero();
+      toast('专注 '+fmt(add)+' 已记入日报'+(add<m?'(今天剩余可记时间不够,记了一部分)':''),4000);
+    }
+    function tick(){
+      if(!P)return;
+      if(P.seg&&left()<=0){beep();record(true);return}
+      btn();if(!md.hidden)view();
+    }
+    function runTimer(){clearInterval(tmr);tmr=setInterval(tick,500)}
+    $('pomoBtn').addEventListener('click',function(){
+      if(!P){q('pm-cat').value=$('m-cat').value;q('pm-name').value='';q('pm-sk').value='';chips()}
+      view();md.hidden=false;
+    });
+    q('pm-close').addEventListener('click',close);
+    q('pm-go').addEventListener('click',function(){
+      var m=Math.round(+q('pm-min').value);
+      if(!(m>=1)||m>180){toast('专注时长要在 1 到 180 分钟之间');return}
+      P={cat:q('pm-cat').value,name:q('pm-name').value.trim(),skill:q('pm-sk').value.trim(),target:m*60000,acc:0,seg:Date.now()};
+      sv();runTimer();btn();view();
+    });
+    q('pm-pause').addEventListener('click',function(){
+      if(!P)return;
+      if(P.seg){P.acc+=Date.now()-P.seg;P.seg=null}else P.seg=Date.now();
+      sv();view();btn();
+    });
+    q('pm-stop').addEventListener('click',function(){if(P){close();record(false)}});
+    q('pm-drop').addEventListener('click',function(){
+      if(!P)return;
+      var bt=q('pm-drop');
+      if(!bt.getAttribute('data-sure')){bt.setAttribute('data-sure','1');bt.textContent='再点一次放弃';setTimeout(function(){bt.removeAttribute('data-sure');bt.textContent='放弃'},3000);return}
+      bt.removeAttribute('data-sure');bt.textContent='放弃';
+      P=null;sv();clearInterval(tmr);tmr=null;btn();view();toast('已放弃');
+    });
+    document.addEventListener('visibilitychange',function(){if(!document.hidden)tick()});
+    ld();
+    if(P){runTimer();tick()}
+    btn();
+  })();
   (function(){
     var st=$('settings');if(!st)return;
     var md=document.createElement('div');md.className='modal';md.hidden=true;md.setAttribute('role','dialog');md.setAttribute('aria-modal','true');
@@ -3369,7 +3502,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   function txType(v){
     var s=String(v==null?'':v).trim().toLowerCase().replace(/[()（）\s]/g,'');
     if(!s)return '';
-    var M={'公务报销':'biz-in','报销':'biz-in','公务支出':'biz-out','公务':'biz-out','投资支出':'inv-out','投资收入':'inv-in','支出不计':'skip-out','收入不计':'skip-in','借入':'jr-in','借出':'jc-out','回款':'hk-in','还款':'hh-out','社保支出':'soc-out','社保收入':'soc-in','社保缴纳':'soc-out','医保支出':'med-out','医保收入':'med-in','医保缴纳':'med-out','不计支出':'skip-out','不计收入':'skip-in'};
+    var M={'公务报销':'biz-in','报销':'biz-in','公务支出':'biz-out','公务':'biz-out','投资支出':'inv-out','投资收入':'inv-in','借入':'jr-in','借出':'jc-out','回款':'hk-in','还款':'hh-out','社保支出':'soc-out','社保收入':'soc-in','社保缴纳':'soc-out','医保支出':'med-out','医保收入':'med-in','医保缴纳':'med-out','不计支出':'skip-out','不计收入':'skip-in'};
     if(M[s])return M[s];
     if(['收入','收','入','income','in','+'].indexOf(s)>=0)return 'in';
     if(['支出','支','出','消费','expense','out','-'].indexOf(s)>=0)return 'out';
@@ -3443,6 +3576,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     buildMap();
   }
 
+  /* waheihei */
   function buildMap(){
     var T=IMP[imp.target], hasHead=$('im-hashead').checked, cols=0, i;
     imp.rows.forEach(function(r){cols=Math.max(cols,r.length)});
@@ -3867,6 +4001,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     draw(wh,W,'体重','kg',1,'这个范围内还没有体重记录。',wref);
     draw(bh,B,'BMI','',1,W.length?'算 BMI 需要先记一次身高。':'这个范围内还没有体重记录。',[{v:18.5,label:'适宜下限 18.5'},{v:24,label:'适宜上限 24'}]);
   }
+  /* whaha */
   function renderBody(){
     var tl=$('b-latest');tl.textContent='';
     var tiles=[];
@@ -4022,7 +4157,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793419402';
+  var BUILD='1793505299';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
@@ -4220,6 +4355,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   }
   boot();
 })();
+/* wheihei */
 </script>
 
 
