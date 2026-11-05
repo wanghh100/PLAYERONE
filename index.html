@@ -1274,6 +1274,17 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   function save(){dirty=true;clearTimeout(saveT);saveT=setTimeout(flush,250)}
   window.addEventListener('pagehide',flush);
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')flush()});
+  /* 过了零点:页面里的“今天”还是旧的,回到页面时自动刷新一次 */
+  var dayRolling=false;
+  function dayCheck(){
+    if(dayRolling||iso(new Date())===today)return;
+    var ae=document.activeElement,tg=ae&&ae.tagName;
+    if(!document.hidden&&(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT'))return;
+    dayRolling=true;flush();setTimeout(function(){location.reload()},700);
+  }
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)dayCheck()});
+  window.addEventListener('focus',dayCheck);window.addEventListener('pageshow',dayCheck);
+  setInterval(dayCheck,60000);
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
   var S=load(), month=today.slice(0,7), tab='time', tday=today, tview='day', tchart='line', gview='month30', gday=today, gbook='main', gdet=today;
   if(!Array.isArray(S.loc))S.loc=[];
@@ -2962,7 +2973,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       shown[d]=1;var v=S.mood[d];return MOODS[String(v)]+' '+(v>0?'+'+v:v);
     }
     host.appendChild(h('div',{class:'tw'},[h('table',{},[h('thead',{},[h('tr',{},(n>1?['日期']:[]).concat(['位置','心情']).map(function(t){return h('th',{text:t})}))]),
-      h('tbody',{},rows.map(function(o){var x=o.x;return h('tr',{},(n>1?[h('td',{class:'num',style:'white-space:nowrap',text:o.d.slice(5)})]:[]).concat([
+      h('tbody',{},rows.map(function(o){var x=o.x;return h('tr',{style:'cursor:pointer',title:'点一下可修改',onclick:function(){if(timeEdit)endTimeEdit();$('m-date').value=o.d;onMDate();var li=$('loc-in');li.scrollIntoView({block:'center',behavior:'smooth'});li.focus();toast('已切到 '+o.d.slice(5)+',改位置后点“记录”,改心情直接选')}},(n>1?[h('td',{class:'num',style:'white-space:nowrap',text:o.d.slice(5)})]:[]).concat([
         h('td',{style:'white-space:normal',text:x?x.place:'—'}),
         h('td',{class:'num',style:'white-space:nowrap',text:moodTxt(o.d)})]))}))])]));
   }
@@ -3000,6 +3011,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
     var lv=$('loc-in').value.trim(), nm0=$('m-name').value.trim(), hv0=$('m-hours').value.trim();
     if(lv&&!nm0&&!hv0&&!timeEdit){var d0=$('m-date').value||today;if(d0>today){toast('不能记录还没到的日期');return}addLoc(lv,d0);save();toast(d0===today?'已记录今天的位置':'已记录 '+d0+' 的位置');return}
+    if(!lv&&!nm0&&!hv0&&!timeEdit){var dd=$('m-date').value||today;if(S.loc.some(function(x){return x.date===dd})){S.loc=S.loc.filter(function(x){return x.date!==dd});locTouched=false;fillLoc();renderLoc();save();toast('已删除 '+dd.slice(5)+' 的位置');return}}
     var hrs=num($('m-hours').value);
     if(!hrs||hrs<=0){toast('时长要大于 0');return}
     var d=$('m-date').value||today, add=Math.round(hrs*60);
@@ -4158,7 +4170,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793581724';
+  var BUILD='1793918253';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
