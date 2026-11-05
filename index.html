@@ -869,7 +869,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       <div class="list" id="qlist"></div>
     </div>
     <form class="panel card" id="f-quest" autocomplete="off">
-      <h2>接新任务</h2>
+      <h2><span id="q-h">接新任务</span> <button class="btn ghost small" type="button" id="q-cancel" hidden>取消修改</button></h2>
       <div class="qrow1"><input id="q-name" required maxlength="60" placeholder="任务名称" aria-label="任务"></div>
       <div class="qrow2"><select id="q-type" aria-label="类型" title="类型"><option>工作</option><option>健身</option><option>吃玩</option><option>输入</option><option>输出</option><option>事务</option><option>社交</option><option>睡眠</option></select><input id="q-due" type="date" aria-label="截止日期" title="截止日期"><button class="btn" type="submit">添加</button></div>
     </form>
@@ -2850,8 +2850,10 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     });
   }
 
+  var qEdit=null;
+  function endQEdit(){qEdit=null;$('q-h').textContent='接新任务';$('q-cancel').hidden=true;$('f-quest').querySelector('button[type=submit]').textContent='添加';$('q-name').value='';$('q-due').value='';$('q-due').min=iso(new Date())}
   function renderQuests(){
-    $('q-due').min=iso(new Date());
+    if(!qEdit)$('q-due').min=iso(new Date());
     var open=S.quests.filter(function(q){return !q.done}), over=open.filter(function(q){return q.due&&q.due<today}).length;
     $('qSum').textContent='待办 '+open.length+' 个'+(over?',逾期 '+over+' 个':'');
     var list=S.quests.slice().sort(function(a,b){
@@ -2884,7 +2886,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       }});
       tgt.appendChild(h('div',{class:'li'+(q.done?' done':'')},[
         cb,
-        h('div',{class:'t'},[document.createTextNode(q.name),h('small',{text:q.type+' · 截止 '+shortDate(q.due)})]),
+        h('div',{class:'t',style:'cursor:pointer',title:'点一下可修改',onclick:function(){qEdit=q;$('q-h').textContent='修改任务';$('q-cancel').hidden=false;$('f-quest').querySelector('button[type=submit]').textContent='保存修改';$('q-name').value=q.name;$('q-type').value=q.type;$('q-due').removeAttribute('min');$('q-due').value=q.due||'';var f=$('f-quest');f.scrollIntoView({block:'center',behavior:'smooth'});$('q-name').focus()}},[document.createTextNode(q.name),h('small',{text:q.type+' · 截止 '+shortDate(q.due)})]),
         h('div',{class:'row',style:'gap:8px;flex-wrap:nowrap'},[late?h('span',{class:'chip bad',text:'逾期'}):null,del])
       ]));
     });
@@ -3235,8 +3237,15 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     save();renderGold();renderHero();
     $('t-name').value='';$('t-amt').value='';$('t-note').value='';toast('已记账');
   });
+  $('q-cancel').addEventListener('click',function(){endQEdit()});
   $('f-quest').addEventListener('submit',function(e){
     e.preventDefault();
+    if(qEdit){
+      var nd=$('q-due').value;
+      if(nd&&nd!==qEdit.due&&nd<iso(new Date())){toast('截止日期不能早于今天');return}
+      qEdit.name=$('q-name').value.trim();qEdit.type=$('q-type').value;qEdit.due=nd;
+      endQEdit();save();renderQuests();renderHero();toast('任务已修改');return;
+    }
     if($('q-due').value&&$('q-due').value<iso(new Date())){toast('截止日期不能早于今天');return}
     S.quests.push({id:uid(),name:$('q-name').value.trim(),type:$('q-type').value,due:$('q-due').value,done:false});
     save();renderQuests();renderHero();
@@ -4170,7 +4179,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793918253';
+  var BUILD='1793919586';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
