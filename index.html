@@ -2931,7 +2931,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     $('th-style').value=(S.theme&&S.theme.style)||'game';$('th-mode').value=(S.theme&&S.theme.mode)||'auto';$('th-accent').value=(S.theme&&S.theme.accent)||'orange';$('th-round').value=(S.theme&&S.theme.round)||'0';
     $('s-cur').value=S.cur;
   }
-  function renderAll(){renderHero();renderTime();renderBody();renderItems();renderSkills();renderGold();renderQuests();renderSettings()}
+  function renderAll(){applyTheme();renderHero();renderTime();renderBody();renderItems();renderSkills();renderGold();renderQuests();renderSettings()}
 
   function setTab(t){
     tab=t;
@@ -3204,14 +3204,14 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   $('tvLine').addEventListener('click',function(){tchart='line';renderTime()});
   $('tvBar').addEventListener('click',function(){tchart='bar';renderTime()});
 
-  $('i-date').value=today;$('i-date').max=today;$('t-date').value=today;$('m-date').value=today;$('m-date').max=today;
+  $('i-date').value=today;$('i-date').max=today;$('t-date').value=today;$('m-date').value=today;$('m-date').max=today;$('t-date').max=today;
   $('m-mood').addEventListener('change',function(){
     var d=$('m-date').value||today;if(d>today){toast('不能记录还没到的日期');updMood();return}
     if(!S.mood)S.mood={};
     if($('m-mood').value==='')delete S.mood[d];else S.mood[d]=Number($('m-mood').value);
     save();renderTime();toast('已记录心情');
   });
-  function onMDate(){updMood();locTouched=false;fillLoc()}
+  function onMDate(){var mv=$('m-date').value;if(mv&&mv>today){$('m-date').value=today;toast('不能记录还没到的日期,已改为今天')}else if(!mv)$('m-date').value=today;updMood();locTouched=false;fillLoc()}
   $('m-date').addEventListener('change',onMDate);$('m-date').addEventListener('input',onMDate);
   $('m-skill').addEventListener('input',updSkNew);
   var pendImg='';
@@ -3229,9 +3229,11 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     save();renderItems();renderHero();
     $('i-name').value='';$('i-brand').value='';$('i-price').value='';$('i-life').value='';toast('已放进背包');
   });
+  $('t-date').addEventListener('change',function(){if(this.value>today){this.value=today;toast('不能记录还没到的日期,已改为今天')}});
   $('f-tx').addEventListener('submit',function(e){
     e.preventDefault();
     var d=$('t-date').value||today;
+    if(d>today){$('t-date').value=today;toast('不能记录还没到的日期');return}
     var amt=num($('t-amt').value);
     if(!amt||amt<=0){toast('金额要大于 0');return}
     var tk=$('t-type').value.split('-'),tkind=tk.length>1?tk[0]:'';
@@ -4182,7 +4184,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793922070';
+  var BUILD='1793954940';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
@@ -4371,6 +4373,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     if(want==='en'){LANG='en';i18nStart()}
     else{LANG='zh';i18nStop();renderAll()}
   }
+  applyTheme();
   setTab('time');
   applyLang();
   renderAll();
