@@ -551,10 +551,12 @@ details.grp .form{margin-top:10px}
 #f-time .form label[hidden]{display:none}
 #f-time .form input,#f-time .form select{height:42px;box-sizing:border-box;width:100%;min-width:0}
 #f-time .form button[type=submit]{grid-column:1/-1;height:42px}
-#f-time .form{grid-template-columns:repeat(6,minmax(0,1fr))}
-#f-time .form label{grid-column:span 3}
-#f-time .form label.c3{grid-column:span 2}
-#f-time .form label.c4{grid-column:span 4}
+#f-time .form{grid-template-columns:repeat(12,minmax(0,1fr))}
+#f-time .form label{grid-column:span 6}
+#f-time .form label.c3{grid-column:span 4}
+#f-time .form label.c4{grid-column:span 8}
+#f-time .form label.c7{grid-column:span 7}
+#f-time .form label.c5{grid-column:span 5}
 #f-time .form label.newsk{grid-column:1/-1}
 #f-time .form button[type=submit]{grid-column:1/-1}
 .app{gap:11px;padding-block:17px 44px}
@@ -728,8 +730,8 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
         <label for="m-cat" class="c3">类别<select id="m-cat"><option>工作</option><option>健身</option><option>吃玩</option><option>输入</option><option>输出</option><option>事务</option><option>社交</option><option>睡眠</option></select></label>
         <label for="m-mood" class="c3">心情<select id="m-mood"><option value="-5">😭 -5</option><option value="-3">😢 -3</option><option value="-1">😕 -1</option><option value="0">😐 0</option><option value="1">🙂 1</option><option value="3">😄 3</option><option value="5">🤩 5</option></select></label>
         <label for="m-hours" class="c3">时长(小时)<input id="m-hours" type="number" inputmode="decimal" min="0.01" max="24" step="any" required></label>
-        <label for="m-date">日期<span class="mdnav"><button type="button" id="mPrev" aria-label="前一天">◀</button><input id="m-date" type="date"><button type="button" id="mNext" aria-label="后一天">▶</button></span></label>
-        <label for="loc-in">位置<input id="loc-in" maxlength="40" placeholder="例如:烟台→上海"></label>
+        <label for="m-date" class="c7">日期<span class="mdnav"><button type="button" id="mPrev" aria-label="前一天">◀</button><input id="m-date" type="date"><button type="button" id="mNext" aria-label="后一天">▶</button></span></label>
+        <label for="loc-in" class="c5">位置<input id="loc-in" maxlength="40" placeholder="例如:烟台"></label>
         <button class="btn" type="submit" id="m-save">记录</button>
         <div class="row wide" style="gap:8px;justify-content:flex-start"><button class="btn ghost" type="button" id="m-cancel" hidden>取消修改</button><button class="btn danger" type="button" id="m-del" hidden>删除这条</button></div>
       </div>
@@ -4204,7 +4206,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1794199693';
+  var BUILD='1794200293';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
