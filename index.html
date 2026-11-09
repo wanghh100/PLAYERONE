@@ -525,6 +525,12 @@ details.grp .form{margin-top:10px}
 #txlist .li .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #txlist .li .t small{display:inline;margin-left:6px;font-size:11px}
 #txlist .btn.small{padding:2px 8px;font-size:12px}
+.mdnav{position:relative;display:block}
+.mdnav input{padding-left:30px!important;padding-right:30px!important;text-align:center}
+.mdnav input::-webkit-calendar-picker-indicator{display:none}
+.mdnav button{position:absolute;top:2px;bottom:2px;width:28px;padding:0;border:0;background:transparent;color:var(--muted);font-size:11px;line-height:1;cursor:pointer;border-radius:8px;z-index:1}
+.mdnav button:hover,.mdnav button:focus-visible{color:var(--ink);background:var(--panel2)}
+#mPrev{left:2px}#mNext{right:2px}
 #qlist .btn.small,#qFar .btn.small{padding:1px 7px;min-height:22px;font-size:11px;line-height:1.2}
 .li.soon .t,.li.soon .t small{color:#d97706}
 #txlist .chip{font-size:11px;padding:1px 6px}
@@ -545,7 +551,13 @@ details.grp .form{margin-top:10px}
 #f-time .form label[hidden]{display:none}
 #f-time .form input,#f-time .form select{height:42px;box-sizing:border-box;width:100%;min-width:0}
 #f-time .form button[type=submit]{grid-column:1/-1;height:42px}
-.app{gap:11px;padding-block:14px 44px}
+#f-time .form{grid-template-columns:repeat(6,minmax(0,1fr))}
+#f-time .form label{grid-column:span 3}
+#f-time .form label.c3{grid-column:span 2}
+#f-time .form label.c4{grid-column:span 4}
+#f-time .form label.newsk{grid-column:1/-1}
+#f-time .form button[type=submit]{grid-column:1/-1}
+.app{gap:11px;padding-block:17px 44px}
 .sec{gap:11px}
 .hero{padding:14px 14px 12px;gap:9px}
 .stats{gap:8px}
@@ -710,14 +722,14 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       <button type="button" class="pomo-btn" id="pomoBtn" aria-label="番茄时钟" title="番茄时钟">🍅</button>
       <h2 id="m-h">记日报</h2>
       <div class="form">
-        <label for="m-name">流向<input id="m-name" maxlength="40" placeholder="例如:看资料、打游戏(可不填)"></label>
-        <label for="m-hours">时长(小时)<input id="m-hours" type="number" inputmode="decimal" min="0.01" max="24" step="any" required></label>
-        <label for="m-cat">类别<select id="m-cat"><option>工作</option><option>健身</option><option>吃玩</option><option>输入</option><option>输出</option><option>事务</option><option>社交</option><option>睡眠</option></select></label>
-        <label for="m-skill">技能(可选)<input id="m-skill" list="skillList" maxlength="30" placeholder="例如:英语" autocomplete="off"><datalist id="skillList"></datalist></label>
+        <label for="m-name" class="c4">流向<input id="m-name" maxlength="40" placeholder="例如:看资料、打游戏(可不填)"></label>
+        <label for="m-skill" class="c3">技能(可选)<input id="m-skill" list="skillList" maxlength="30" placeholder="例如:英语" autocomplete="off"><datalist id="skillList"></datalist></label>
         <label for="m-skpre" class="newsk" hidden>此前已练(小时)<input id="m-skpre" type="number" inputmode="decimal" min="0" step="any" value="0"></label>
-        <label for="m-date">日期<input id="m-date" type="date"></label>
-        <label for="m-mood">心情<select id="m-mood"><option value="-5">😭 -5</option><option value="-3">😢 -3</option><option value="-1">😕 -1</option><option value="0">😐 0</option><option value="1">🙂 1</option><option value="3">😄 3</option><option value="5">🤩 5</option></select></label>
-        <label for="loc-in" class="wide">位置<input id="loc-in" maxlength="40" placeholder="例如:烟台→上海→香港(可只填这一栏)"></label>
+        <label for="m-cat" class="c3">类别<select id="m-cat"><option>工作</option><option>健身</option><option>吃玩</option><option>输入</option><option>输出</option><option>事务</option><option>社交</option><option>睡眠</option></select></label>
+        <label for="m-mood" class="c3">心情<select id="m-mood"><option value="-5">😭 -5</option><option value="-3">😢 -3</option><option value="-1">😕 -1</option><option value="0">😐 0</option><option value="1">🙂 1</option><option value="3">😄 3</option><option value="5">🤩 5</option></select></label>
+        <label for="m-hours" class="c3">时长(小时)<input id="m-hours" type="number" inputmode="decimal" min="0.01" max="24" step="any" required></label>
+        <label for="m-date">日期<span class="mdnav"><button type="button" id="mPrev" aria-label="前一天">◀</button><input id="m-date" type="date"><button type="button" id="mNext" aria-label="后一天">▶</button></span></label>
+        <label for="loc-in">位置<input id="loc-in" maxlength="40" placeholder="例如:烟台→上海"></label>
         <button class="btn" type="submit" id="m-save">记录</button>
         <div class="row wide" style="gap:8px;justify-content:flex-start"><button class="btn ghost" type="button" id="m-cancel" hidden>取消修改</button><button class="btn danger" type="button" id="m-del" hidden>删除这条</button></div>
       </div>
@@ -3212,6 +3224,14 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     save();renderTime();toast('已记录心情');
   });
   function onMDate(){var mv=$('m-date').value;if(mv&&mv>today){$('m-date').value=today;toast('不能记录还没到的日期,已改为今天')}else if(!mv)$('m-date').value=today;updMood();locTouched=false;fillLoc()}
+  function mShift(n){
+    var cur=$('m-date').value||today,nx=iso(addDays(parseD(cur),n));
+    if(nx>today){toast('明天还没到');return}
+    $('m-date').value=nx;onMDate();
+  }
+  $('mPrev').addEventListener('click',function(){mShift(-1)});
+  $('mNext').addEventListener('click',function(){mShift(1)});
+  $('m-date').addEventListener('click',function(){try{if(this.showPicker)this.showPicker()}catch(e){}});
   $('m-date').addEventListener('change',onMDate);$('m-date').addEventListener('input',onMDate);
   $('m-skill').addEventListener('input',updSkNew);
   var pendImg='';
@@ -4184,7 +4204,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1793954940';
+  var BUILD='1794199693';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
