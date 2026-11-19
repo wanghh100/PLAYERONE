@@ -2073,7 +2073,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     var lim=iso(addDays(parseD(today),-1500));if(f0<lim)f0=lim;
     /* 每天的分数存进 S.ach.sc,过去的日子只算一次,今天的每次刷新 */
     var SC=A.sc, DAY=86400000, ser=[];
-    if(SC.v!==8){SC.v=8;SC.a=[]}
+    if(SC.v!==9){SC.v=9;SC.a=[]}
     /* 过去的数据有增减或修改(补记、导入、撤销、恢复存档)时,旧分数作废,重新算 */
     var sg=0;
     [S.tx,S.time,S.body].forEach(function(arr,ai){
@@ -4206,7 +4206,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1795053104';
+  var BUILD='1795053402';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
