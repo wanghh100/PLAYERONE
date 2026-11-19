@@ -1189,7 +1189,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     var r={lang:o.lang==='en'?'en':'zh',name:o.name||'',bio:(o.bio!=null?String(o.bio):(o.title||'')).split(/\r?\n/).slice(0,4).join('\n'),avatar:(typeof o.avatar==='string'?o.avatar:''),lastBackup:(typeof o.lastBackup==='string'?o.lastBackup:''),theme:(o.theme&&typeof o.theme==='object')?o.theme:{style:'game',mode:'auto',accent:'orange',round:'0'},cur:o.cur==null?'¥':o.cur,motto:Array.isArray(o.motto)&&o.motto.length===3?o.motto.map(function(m){return String(m).slice(0,9)}):['英语学了吗？','健身了吗？','复盘了吗？']};
     ['time','items','tx','quests','body','reminders','loc'].forEach(function(k){r[k]=Array.isArray(o[k])?o[k]:[]});
     var oa=o.ach&&typeof o.ach==='object'&&!Array.isArray(o.ach)?o.ach:{};
-    r.ach={n:(oa.n&&typeof oa.n==='object'&&!Array.isArray(oa.n))?oa.n:{},tm:typeof oa.tm==='string'?oa.tm:'',tmN:+oa.tmN>0?Math.floor(+oa.tmN):0,init:!!oa.init,sc:(oa.sc&&typeof oa.sc.s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(oa.sc.s)&&Array.isArray(oa.sc.a)?{s:oa.sc.s,v:+oa.sc.v||0,a:oa.sc.a.slice(0,3000).map(function(x){return typeof x==='number'?x:-1})}:{s:'',v:0,a:[]}),bk0:(typeof oa.bk0==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(oa.bk0)?oa.bk0:''),bk:(Array.isArray(oa.bk)?oa.bk:[]).filter(function(x){return typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)}).slice(-800)};
+    r.ach={n:(oa.n&&typeof oa.n==='object'&&!Array.isArray(oa.n))?oa.n:{},tm:typeof oa.tm==='string'?oa.tm:'',tmN:+oa.tmN>0?Math.floor(+oa.tmN):0,init:!!oa.init,sc:(oa.sc&&typeof oa.sc.s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(oa.sc.s)&&Array.isArray(oa.sc.a)?{s:oa.sc.s,v:+oa.sc.v||0,sg:+oa.sc.sg||0,a:oa.sc.a.slice(0,3000).map(function(x){return typeof x==='number'?x:-1})}:{s:'',v:0,a:[]}),bk0:(typeof oa.bk0==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(oa.bk0)?oa.bk0:''),bk:(Array.isArray(oa.bk)?oa.bk:[]).filter(function(x){return typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)}).slice(-800)};
     r.loc=r.loc.filter(function(x){return x&&typeof x.place==='string'&&x.place&&typeof x.date==='string'});
     r.items.forEach(function(i){if(i&&i.status==='待更换')i.status='损坏'});
     r.itemSort=o.itemSort==='rand'?'rand':'date';r.itemOrd=(o.itemOrd&&typeof o.itemOrd==='object'&&!Array.isArray(o.itemOrd))?o.itemOrd:{};
@@ -2086,12 +2086,14 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     if(!SC.s||SC.s>f0){SC.s=f0;SC.a=[]}
     if(Math.round((parseD(today)-parseD(SC.s))/86400000)>1600){var cut=Math.round((parseD(today)-parseD(SC.s))/86400000)-1500;SC.a.splice(0,cut);SC.s=iso(addDays(parseD(SC.s),cut))}
     var d0=parseD(SC.s), nDays=Math.round((parseD(today)-d0)/DAY);
+    var scNew=false,hadLen=SC.a.length;
     for(var di=0;di<=nDays;di++){
       if(di<SC.a.length&&di<nDays)continue;
       var Ls=lifeState(iso(addDays(d0,di)));
-      SC.a[di]=Ls.state?Ls.score:-1;
+      SC.a[di]=Ls.state?Ls.score:-1;if(di<nDays)scNew=true;
     }
     SC.a.length=nDays+1;
+    if(scNew||hadLen===0)save();
     var vi=0;
     SC.a.forEach(function(v,di){if(isRest(iso(addDays(d0,di))))return;ser.push({d:vi*DAY,s:v>=0?v:null});vi++});
     function spells(ok,minDays){
@@ -4206,7 +4208,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1795053402';
+  var BUILD='1795053710';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
