@@ -533,6 +533,7 @@ details.grp .form{margin-top:10px}
 #mPrev{left:2px}#mNext{right:2px}
 #qlist .btn.small,#qFar .btn.small{padding:1px 7px;min-height:22px;font-size:11px;line-height:1.2}
 .li.soon .t,.li.soon .t small{color:#d97706}
+.li.late .t,.li.late .t small{color:var(--bad)}
 #txlist .chip{font-size:11px;padding:1px 6px}
 #dPrev,#dNext,#gtPrev,#gtNext{min-width:68px;padding-left:18px;padding-right:18px}
 .detnav{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;margin:2px 0 8px}
@@ -840,6 +841,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
         <label for="t-date">日期<input id="t-date" type="date"></label>
         <label for="t-cat">类别<select id="t-cat"><option>住房</option><option>餐饮</option><option>交通</option><option>订阅</option><option>学习</option><option>投资</option><option>其他</option></select></label>
         <label for="t-ch">渠道<select id="t-ch"><option value="">未选</option><option>线上预订(购买)</option><option>线下扫码(现金)</option><option>公司</option><option>加密</option><option>股市-A</option><option>股市-港美</option></select></label>
+        <label for="t-ref" id="t-refw" class="wide" hidden>对应哪一笔(可不选)<select id="t-ref"></select></label>
         <label for="t-note">备注<input id="t-note" maxlength="30" placeholder="可不填"></label>
         <button class="btn" type="submit">记账</button>
       </div>
@@ -922,7 +924,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
             <tr><td>日常节奏</td><td>最近 14 天(不含今天,至少 3 天有日报)的日均:睡眠和吃玩合在一起占 35% + 工作 60% + 输入 5%(健身不在这里考核,看体检指标;输出不考核)。睡眠加吃玩合计 ≥9.5 小时满分,≥8 小时 75 分,≥6.5 小时 45 分,更少 20 分;工作日均 ≤2 小时满分,之后 ≤4/6/7/8/9/10/11/13 小时依次是 90/80/70/60/50/40/30/20 分,更多 10 分;输入 ≥0.25 小时满分,有一点 80 分,完全没有 60 分。睡眠忽长忽短(每天睡眠时长的标准差超过 1.5 小时)再扣 4 分;连续 3 天睡眠不到 5.5 小时再扣 6 分。有日报但没记睡眠的天,睡眠按 0 小时算。</td></tr>
             <tr><td>身体</td><td>最近一年半里每个指标的最新值,对照通用成人参考范围(血红蛋白、转氨酶、谷氨酰转肽酶、肌酐、尿酸、高密度脂蛋白按性别区分,没填性别或填“其他”用通用范围):在范围内记 1 分,略超出记 0.5 分,明显超出记 0 分,尿常规阴性记 1 分。体重和身高会算 BMI(18.5–24 为 1 分)。取平均后乘 100;超过一年没体检再扣 8 分。至少要 3 项指标。</td></tr>
             <tr><td>钱</td><td>两项各占一半:①最近 30 天结余金额 = 收入 − 支出,≥2 万满分,≥1.5 万 90 分,≥1 万 80 分,≥6000 70 分,≥3000 60 分,≥1000 50 分,≥0 40 分,≥ −2000 30 分,≥ −5000 20 分,更低 10 分;投资和借入、借出、回款、还款不算收入也不算消费,最近 30 天没有收支时这一项不计。②可动用资产 ÷ 近 3 个月月均支出(约够花几个月)。月均支出 = 最近 90 天生活支出 ÷ 3,投资和借入、借出、回款、还款不算消费。可动用资产 = 现金结余 + 投资净额(按成本)× 50% − 借款未还;现金结余只是因为投了钱才变成负数的,不算亏空,按 0 算。现金比投资重要:投资只算五折,而且纯现金不到 3 个月最高 75 分,不到 1 个月最高 55 分,现金为负最高 30 分。没填生日:≥6 个月满分,≥3 个月 80 分,≥1 个月 55 分,≥0 30 分,负数 0 分。填了生日:和该年龄的参考月数比(22 岁及以下 1 个月,30 岁 12 个月,40 岁约 26 个月,50 岁约 51 个月,60 岁约 69 个月,67 岁起约 86 个月,中间按直线算),达到 1.2 倍满分,1 倍 85 分,0.6 倍 65 分,0.3 倍 40 分,更低 20 分,负数 0 分。参考值是我按常识定的,只是粗略参考。</td></tr>
-            <tr><td>心情</td><td>最近 14 天日报里记过的心情(−5 到 +5,至少 4 天)。心情 0 是正常状态,不扣分:平均 ≥ −0.5 满分,≥ −1.5 75 分,≥ −2.5 50 分,≥ −3.5 30 分,更低 12 分;低落的天(≤ −3)占比每 2.5% 扣 1 分,最多扣 20;起伏很大(标准差 >3.5)再扣 8。</td></tr>
+            <tr><td>心情</td><td>最近 14 天日报里记过的心情(−5 到 +5,至少 4 天)。心情 0 是正常状态,算 80 分(平均在 0 到 +0.5 之间都是 80,满分要心情真的好):平均 +1 得 92 分,≥ +2 满分;低于 0 开始扣分:−1 得 60 分,−2 得 40 分,−3 得 25 分,≤ −4 得 10 分(中间按比例);低落的天(≤ −3)占比每 2.5% 扣 1 分,最多扣 20;起伏很大(标准差 >3.5)再扣 8。</td></tr>
             <tr><td>成长</td><td>最近 30 天在日报里记在技能下的时间:总小时占 70%(≥20h 满分,≥10h 80,≥4h 60,有就 40,没有 15),练习天数占 30%(≥12 天满分,≥6 天 75,≥2 天 50,1 天 35,0 天 15)。还没有任何技能记录就不计分。</td></tr>
             <tr><td>关系</td><td>最近 14 天(不含今天)有日报的日子里,记了“社交”的天数占比:≥10% 满分,≥6% 80 分,≥3% 55 分,有但更少 40 分,没有 20 分。至少要 3 天有日报。</td></tr>
             <tr><td>物品</td><td>平均耐久度 × 70% + 耐久度不低于 30% 的物品占比 × 30%。只算有购买日期的物品。</td></tr>
@@ -1022,6 +1024,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       <label>日期<input id="tx-date" type="date"></label>
       <label>类别<select id="tx-cat"><option>住房</option><option>餐饮</option><option>交通</option><option>订阅</option><option>学习</option><option>投资</option><option>其他</option></select></label>
       <label style="grid-column:1/-1">渠道<select id="tx-ch"><option value="">未选</option><option>线上预订(购买)</option><option>线下扫码(现金)</option><option>公司</option><option>加密</option><option>股市-A</option><option>股市-港美</option></select></label>
+      <label id="tx-refw" style="grid-column:1/-1" hidden>对应哪一笔(可不选)<select id="tx-ref"></select></label>
       <label>备注<input id="tx-note" maxlength="30" placeholder="可不填"></label>
     </div>
     <div class="row" style="justify-content:space-between;margin-top:12px"><button class="btn danger" type="button" id="txDel">删除这笔</button><span class="row" style="gap:8px"><button class="btn ghost" type="button" id="txCancel">取消</button><button class="btn" type="button" id="txSave">保存</button></span></div>
@@ -1208,6 +1211,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     r.time=r.time.filter(function(t){return t&&['工作','健身','吃玩','输入','输出','事务','社交','睡眠'].indexOf(t.cat)>=0});
     r.quests.forEach(function(q){if(q){var QM={'账单':'事务','生活':'事务','学习':'输入','锻炼':'健身'};if(QM[q.type])q.type=QM[q.type]}});
     r.tx.forEach(function(t){if(t&&'pay' in t)delete t.pay});
+    (function(){var ids={};r.tx.forEach(function(t){if(t&&t.id)ids[t.id]=1});r.tx.forEach(function(t){if(t&&'ref' in t&&(typeof t.ref!=='string'||!ids[t.ref]||t.ref===t.id))delete t.ref})})();
     r.tx=r.tx.filter(function(t){return !(t&&(t.cat==='住房'||t.cat==='订阅'||t.cat==='学习'||t.kind==='mskip'||t.kind==='skip'))});
     if(Array.isArray(r.tx))r.tx.forEach(function(t){if(t&&(t.ch==='盛拓传媒'||t.ch==='中国海油'||t.ch==='工作'))t.ch='公司'});
     if(Array.isArray(r.tx)){var MIG={'数码':'数码电器','服务订阅':'生活服务','学习':'学习培训','工作':'工资'};r.tx.forEach(function(t){if(t&&t.kind!=='biz'&&t.kind!=='inv'&&t.kind!=='skip'&&t.kind!=='soc'&&t.kind!=='med'&&t.kind!=='pen'&&MIG[t.cat])t.cat=MIG[t.cat]})}
@@ -1321,6 +1325,24 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   function capOf(ds){return ds===today?nowMin():1440}
   function dayMin(ds){var n=0;S.time.forEach(function(t){if(t.date===ds)n+=t.min});return n}
   var TXK={'':{out:'支出',in:'收入'},biz:{out:'公务支出',in:'公务报销'},inv:{out:'投资支出',in:'投资收入'},soc:{out:'社保支出',in:'社保收入'},pen:{out:'养老金收入',in:'养老金收入'},med:{out:'医保支出',in:'医保收入'},jr:{out:'借入',in:'借入'},jc:{out:'借出',in:'借出'},hk:{out:'回款',in:'回款'},hh:{out:'还款',in:'还款'},mskip:{out:'支出（不计）',in:'收入（不计）'},skip:{out:'支出（不计）',in:'收入（不计）'}};
+  /* 对应关系:报销→公务支出,回款→借出,还款→借入(一笔对应一笔原始记录,原始记录可被多次对应) */
+  var CLOSE_MAP={'biz-in':'biz-out','hk-in':'jc-out','hh-out':'jr-in'};
+  var CLOSE_WORD={'biz-out':'已报销','jc-out':'已回款','jr-in':'已还'};
+  function tkey(t){return (t.kind?t.kind+'-':'')+t.type}
+  function settledOf(id,exId){var n=0;S.tx.forEach(function(x){if(x.ref===id&&x.id!==exId)n+=x.amt});return n}
+  function fillRef(sel,typeVal,cur,exId){
+    var w=sel.parentNode,tg=CLOSE_MAP[typeVal];
+    sel.textContent='';
+    if(!tg){w.hidden=true;return}
+    w.hidden=false;
+    sel.appendChild(h('option',{value:'',text:'不指定'}));
+    S.tx.filter(function(x){return x.date&&x.id!==exId&&tkey(x)===tg}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0}).slice(0,200).forEach(function(o){
+      var st=settledOf(o.id,exId),rem=Math.round((o.amt-st)*100)/100;
+      if(rem<=0&&o.id!==cur)return;
+      sel.appendChild(h('option',{value:o.id,text:o.date.slice(5)+' '+o.name+' '+money(o.amt)+(st>0?'(剩 '+money(rem)+')':'')}));
+    });
+    sel.value=cur||'';if(sel.value!==(cur||''))sel.value='';
+  }
   function txLab(t){return (TXK[t.kind||'']||TXK['']) [t.type==='in'?'in':'out']}
   function tcolOf(v){var k=v.indexOf('-')>0?v.split('-')[0]:'';return k==='biz'?'#3a78d6':(k==='inv'||k==='jr'||k==='jc'||k==='hk'||k==='hh'||k==='skip'?'var(--s3)':((k==='soc'||k==='med'||k==='pen')?'var(--s7)':'var(--accent)'))}
   function tdotOf(v){var c=tcolOf(v);return c==='#3a78d6'?'🔵':(c==='var(--s3)'?'🟢':(c==='var(--s7)'?'🟣':'🟠'))}
@@ -1755,7 +1777,9 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     if(v.length<4)return {ok:false,why:'最近 14 天只记了 '+v.length+' 天心情,至少要 4 天。在日报里每天记一下心情就行。'};
     var n=v.length, avg=v.reduce(function(a,b){return a+b},0)/n;
     var bad=v.filter(function(x){return x<=-3}).length, sd=Math.sqrt(v.reduce(function(a,x){return a+(x-avg)*(x-avg)},0)/n);
-    var sc=lsBand(avg,[[function(x){return x>=-0.5},100],[function(x){return x>=-1.5},75],[function(x){return x>=-2.5},50],[function(x){return x>=-3.5},30],[function(){return 1},12]]);
+    var MA=[[-4,10],[-3,25],[-2,40],[-1,60],[0,80],[0.5,80],[1,92],[2,100]],sc=avg<=MA[0][0]?MA[0][1]:avg>=2?100:0;
+    for(var mi=1;mi<MA.length;mi++){if(avg<=MA[mi][0]&&avg>MA[mi-1][0]){sc=MA[mi-1][1]+(MA[mi][1]-MA[mi-1][1])*(avg-MA[mi-1][0])/(MA[mi][0]-MA[mi-1][0]);break}}
+    sc=Math.round(sc);
     sc-=Math.min(20,Math.round(bad/n*40));
     if(sd>3.5)sc-=8;
     sc=Math.max(0,Math.min(100,sc));
@@ -2073,7 +2097,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     var lim=iso(addDays(parseD(today),-1500));if(f0<lim)f0=lim;
     /* 每天的分数存进 S.ach.sc,过去的日子只算一次,今天的每次刷新 */
     var SC=A.sc, DAY=86400000, ser=[];
-    if(SC.v!==9){SC.v=9;SC.a=[]}
+    if(SC.v!==11){SC.v=11;SC.a=[]}
     /* 过去的数据有增减或修改(补记、导入、撤销、恢复存档)时,旧分数作废,重新算 */
     var sg=0;
     [S.tx,S.time,S.body].forEach(function(arr,ai){
@@ -2293,6 +2317,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     if(!Array.prototype.some.call($('tx-type').options,function(o){return o.value===tv0})){var op0=document.createElement('option');op0.value=tv0;op0.textContent=(TXK[t.kind]||TXK[''])[t.type];op0.setAttribute('data-tmp','1');$('tx-type').appendChild(op0)}
     $('tx-type').value=(t.kind?t.kind+'-':'')+t.type;paintSel($('tx-type'));$('tx-amt').value=t.amt;$('tx-name').value=t.name||'';$('tx-date').value=t.date||today;$('tx-date').max=today;
     setCats($('tx-cat'),bookOf(t),t.cat);setChs($('tx-ch'),bookOf(t),t.ch||'');$('tx-note').value=t.note||'';
+    fillRef($('tx-ref'),$('tx-type').value,t.ref||'',t.id);
     $('txModal').hidden=false;$('tx-name').focus();
   }
   function closeTx(){$('txModal').hidden=true;txEdit=null}
@@ -2304,12 +2329,13 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     if(d>today){toast('不能记录还没到的日期');return}
     var tk=$('tx-type').value.split('-');
     txEdit.type=tk[tk.length-1];txEdit.kind=tk.length>1?tk[0]:'';txEdit.amt=amt;txEdit.name=$('tx-name').value.trim()||txEdit.name;txEdit.date=d;txEdit.cat=$('tx-cat').value;txEdit.ch=$('tx-ch').value;txEdit.note=$('tx-note').value.trim();
+    if(CLOSE_MAP[$('tx-type').value]&&$('tx-ref').value&&$('tx-ref').value!==txEdit.id)txEdit.ref=$('tx-ref').value;else delete txEdit.ref;
     var bk=bookOf(txEdit);if(bk!==gbook&&gbook!=='dash'){gbook=bk}gdet=d;
-    save();closeTx();renderGold();renderHero();toast('已修改');
+    save();closeTx();updRef();renderGold();renderHero();toast('已修改');
   });
   $('txDel').addEventListener('click',function(){
     if(!txEdit)return;var id=txEdit.id;
-    S.tx=S.tx.filter(function(x){return x.id!==id});save();closeTx();renderGold();renderHero();toast('已删除');
+    S.tx=S.tx.filter(function(x){return x.id!==id});S.tx.forEach(function(x){if(x.ref===id)delete x.ref});save();closeTx();updRef();renderGold();renderHero();toast('已删除');
   });
   $('txCancel').addEventListener('click',closeTx);
   bdClose($('txModal'),closeTx);
@@ -2851,7 +2877,14 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     $('f-tx').hidden=dash;document.querySelector('#sec-gold .filters').hidden=!dash;
     $('gdash').hidden=!dash;
     if(dash){renderDash(R,isCal);renderDetail();return}
-    setCats($('t-cat'),gbook);setChs($('t-ch'),gbook);var tsel=$('t-type');if(tsel.getAttribute('data-bk')!==gbook){tsel.textContent='';BOOK_OPTS[gbook].forEach(function(o){tsel.appendChild(h('option',{value:o[0],text:o[1]}))});tsel.setAttribute('data-bk',gbook)}paintSel(tsel);
+    setCats($('t-cat'),gbook);setChs($('t-ch'),gbook);var tsel=$('t-type');if(tsel.getAttribute('data-bk')!==gbook){tsel.textContent='';BOOK_OPTS[gbook].forEach(function(o){tsel.appendChild(h('option',{value:o[0],text:o[1]}))});tsel.setAttribute('data-bk',gbook);paintSel(tsel);updRef()}paintSel(tsel);
+  }
+  function subOf(t){
+    var a=[t.cat,t.note].filter(Boolean);
+    if(t.ref){var o=null;for(var i=0;i<S.tx.length;i++)if(S.tx[i].id===t.ref){o=S.tx[i];break}if(o)a.push('→ '+o.name+' '+o.date.slice(5))}
+    var cw=CLOSE_WORD[tkey(t)];
+    if(cw){var st=settledOf(t.id);if(st>0)a.push(st>=t.amt-0.005?'已结清':cw+' '+money(st)+'/'+money(t.amt))}
+    return a.join(' · ');
   }
   function renderDetail(){
     var dl=S.tx.filter(function(t){return t.date===gdet&&t.kind!=='mskip'&&dsel.line.indexOf(grpOf(t))>=0});
@@ -2862,7 +2895,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
       var ed=h('button',{class:'btn ghost small',type:'button',text:'修改',onclick:function(){openTx(t)}});
       tl.appendChild(h('div',{class:'li'},[
         h('span',{class:'chip mute',text:txLab(t)}),
-        h('div',{class:'t'},[document.createTextNode(t.name),h('small',{text:[t.cat,t.note].filter(Boolean).join(' · ')})]),
+        h('div',{class:'t'},[document.createTextNode(t.name),h('small',{text:subOf(t)})]),
         h('div',{class:'row',style:'gap:8px;flex-wrap:nowrap'},[h('span',{class:'amt '+t.type,text:(t.type==='in'?'+':'-')+money(t.amt)}),ed])
       ]));
     });
@@ -2903,7 +2936,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
         S.quests=S.quests.filter(function(x){return x.id!==q.id});save();renderQuests();renderHero();
       }});
       var soon=!q.done&&q.due&&q.due>=today&&Math.round((parseD(q.due)-parseD(today))/864e5)<=3;
-      tgt.appendChild(h('div',{class:'li'+(q.done?' done':'')+(soon?' soon':'')},[
+      tgt.appendChild(h('div',{class:'li'+(q.done?' done':'')+(soon?' soon':'')+(late?' late':'')},[
         cb,
         h('div',{class:'t',style:'cursor:pointer',title:'点一下可修改',onclick:function(){qEdit=q;$('q-h').textContent='修改任务';$('q-cancel').hidden=false;$('f-quest').querySelector('button[type=submit]').textContent='保存修改';$('q-name').value=q.name;$('q-type').value=q.type;$('q-due').removeAttribute('min');$('q-due').value=q.due||'';var f=$('f-quest');f.scrollIntoView({block:'center',behavior:'smooth'});$('q-name').focus()}},[document.createTextNode(q.name),h('small',{text:q.type+' · 截止 '+shortDate(q.due)})]),
         h('div',{class:'row',style:'gap:8px;flex-wrap:nowrap'},[late?h('span',{class:'chip bad',text:'逾期'}):null,del])
@@ -3261,10 +3294,12 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     var amt=num($('t-amt').value);
     if(!amt||amt<=0){toast('金额要大于 0');return}
     var tk=$('t-type').value.split('-'),tkind=tk.length>1?tk[0]:'';
-    S.tx.push({id:uid(),type:tk[tk.length-1],kind:tkind,name:$('t-name').value.trim(),amt:amt,date:d,cat:$('t-cat').value,ch:$('t-ch').value,note:$('t-note').value.trim()});
+    var ntx={id:uid(),type:tk[tk.length-1],kind:tkind,name:$('t-name').value.trim(),amt:amt,date:d,cat:$('t-cat').value,ch:$('t-ch').value,note:$('t-note').value.trim()};
+    if(CLOSE_MAP[$('t-type').value]&&$('t-ref').value)ntx.ref=$('t-ref').value;
+    S.tx.push(ntx);
     month=d.slice(0,7);gday=d>today?today:d;gdet=d>today?today:d;
     save();renderGold();renderHero();
-    $('t-name').value='';$('t-amt').value='';$('t-note').value='';toast('已记账');
+    $('t-name').value='';$('t-amt').value='';$('t-note').value='';updRef();toast('已记账');
   });
   $('q-cancel').addEventListener('click',function(){endQEdit()});
   $('f-quest').addEventListener('submit',function(e){
@@ -3299,7 +3334,13 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
   $('gtDate').addEventListener('change',function(){var v=this.value;if(!v)return;gdet=v>today?today:v;renderGold()});
   $('gtPrev').addEventListener('click',function(){gdet=iso(addDays(parseD(gdet),-1));renderGold()});
   $('gtNext').addEventListener('click',function(){var nx=iso(addDays(parseD(gdet),1));if(nx>today){toast('明天还没到');return}gdet=nx;renderGold()});
-  $('t-type').addEventListener('change',function(){paintSel(this)});$('tx-type').addEventListener('change',function(){paintSel(this)});paintSel($('tx-type'));
+  function updRef(){fillRef($('t-ref'),$('t-type').value,'',null)}
+  $('t-ref').addEventListener('change',function(){
+    if(!this.value||$('t-amt').value)return;
+    var o=S.tx.filter(function(x){return x.id===$('t-ref').value})[0];
+    if(o){var rem=Math.round((o.amt-settledOf(o.id,null))*100)/100;if(rem>0){$('t-amt').value=rem;if(!$('t-name').value)$('t-name').value=o.name}}
+  });
+  $('t-type').addEventListener('change',function(){paintSel(this);updRef()});$('tx-type').addEventListener('change',function(){paintSel(this);fillRef($('tx-ref'),this.value,'',txEdit?txEdit.id:null)});paintSel($('tx-type'));
   (function(){var el=$('gb-dash');function go(){gbook='dash';renderGold()}
     el.addEventListener('click',go);
     el.addEventListener('keydown',function(e){if(e.target===el&&(e.key==='Enter'||e.key===' ')){e.preventDefault();go()}});
@@ -4208,7 +4249,7 @@ img,svg{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
     e.preventDefault();
   });
   /* ===== 手动检查更新(设置里,货币符号旁边) ===== */
-  var BUILD='1795053710';
+  var BUILD='1795429804';
   $('s-upd').addEventListener('click',function(){
     var btn=this;
     if(BUILD.charAt(0)==='_'||!/^https?:$/.test(location.protocol)){toast('这是预览版,没有版本检测');return}
